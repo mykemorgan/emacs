@@ -1,0 +1,34 @@
+> I would like to have a small function, attached to a combination of
+> keys in C/C++/h mode, that given a selected region surrounds this
+> region with an "#ifdef <value> ... #endif // <value>" sequence, or
+> something similar. The value <value> should be changeable.
+
+Try this (e.g. in your .emacs):
+
+(defun my-c-insert-ifdef (start end macro)
+  "ARGS: start end macro
+\"ifdef's\" the selected region, marking it with
+#ifdef <macro>>
+      ....
+#endif <macro>
+The user is prompted for <macro> in the minibuffer."
+  (interactive "r\nsMacro: ")
+  (save-excursion
+    (goto-char start)
+    (beginning-of-line)
+    (let ((if-statement (concat "#ifdef " macro "\n\n")))
+      (insert if-statement)
+      (goto-char (1- (+ end (length if-statement))))
+      (end-of-line)
+      (if (bolp)
+          (insert (concat "\n#endif " macro "\n"))
+        (insert (concat "\n\n#endif /* " macro "*/\n"))))))
+
+(define-key c-mode-map "\C-c\C-s" 'my-c-insert-ifdef)
+
+[ the key sequence can be anything you want, essentially - I chose
+\C-c\C-s because other \C-c mnemonics were assigned already and s
+stands for surround... ].
+
+Select the region, hit the key sequence, enjoy.
+

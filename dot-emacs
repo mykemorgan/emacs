@@ -1,0 +1,338 @@
+;; -*- emacs-lisp -*-
+;;
+;; mm ~/.emacs file.
+;; $Id: .emacs,v 1.15 2007/09/17 18:08:37 mimorgan Exp $
+;; --
+
+;; Load version control commands.
+;(vc-load-vc-hooks)
+
+(setq load-path (cons (expand-file-name "~/emacs/") load-path))
+(setq load-path (cons (expand-file-name "/x/home/mimorgan/emacs/") load-path))
+
+(cond ((string-match "XEmacs\\|Lucid" emacs-version)
+       ;; Load gnuserv to let outside programs connect to xemacs.
+       (gnuserv-start)
+
+       ;; Startup files for XEmacs 19.xx
+;;       (load-library "xemacs-general")
+;;       (load-library "xemacs-keys")
+       (load-library "xemacs-packages")
+       (message "Startup files loaded succesfully.")))
+
+; Always load the following libs
+
+;; Desktop package for restoring buffers on startup.
+;; For now, needs to be activated manually to save, and
+;; to restore need to load desktop file and execute buffer.
+; See:
+; http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
+; (desktop-save-mode 1) might get this to auto-restore.
+;
+; Be careful about turning it on universally because then every time
+; EDITOR is invoked (i.e. on commits), it will load everything.
+(if (locate-library "desktop") 
+    (load-library "desktop"))
+
+;; RFC location package
+(if (locate-library "RFC-find") 
+    (load-library "RFC-find"))
+
+;; mm-code-helpers contains most of the 'mm-XXX' elisp functions.
+(if (locate-library "mm-code-helpers") 
+    (load-library "mm-code-helpers"))
+(if (locate-library "mm-find-header-at-point") 
+    (load-library "mm-find-header-at-point"))
+
+;; 
+(if (locate-library "python-mode") 
+    (load-library "python-mode"))
+
+;; ClearCase interface
+; ClearCase is dog-slow on dynamic views. Disabling 7/19/2006
+;(if (locate-library "clearcase") 
+;    (load-library "clearcase"))
+
+;; Perforce interface
+;(if (locate-library "p4-8_5") 
+;    (progn
+;      (setq p4-default-diff-options "-d")
+;      (load-library "p4-8_5")))
+
+; Generic stuff
+(line-number-mode 1)
+(column-number-mode 1)
+(display-time)
+
+; Key settings, some helpful stuff.
+(global-set-key "\M-g"      'goto-line)
+(global-set-key [(meta down)]    'goto-next-error)
+(global-set-key [(meta up)]      'goto-prev-error)
+(global-set-key "\M-n"	    'scroll-line-up)
+(global-set-key "\M-p"	    'scroll-line-down)
+
+;(global-set-key [f8] 'start-kbd-macro)
+;(global-set-key [f9] 'end-kbd-macro)
+;(global-set-key [f10] 'call-last-kbd-macro)
+;(global-set-key [f11] 'compile)
+; Need to make the (read-from-minibuffer "call" into a string? Maybe with let?
+;(global-set-key [f12] (lambda (tag) 
+;			(interactive 
+;			 (read-from-minibuffer "Apropos tag: " nil nil nil 
+;                                              minibuffer-history (current-word)))
+;			(tags-apropos tag)))
+
+(global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
+(global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
+
+;; Options Menu Settings
+;; Needs to be before customizations, since for some reason it messes up
+;; my tab width settings.
+;; Also contains italic font specifier.
+;; =====================
+(cond
+ ((and (string-match "XEmacs" emacs-version)
+       (boundp 'emacs-major-version)
+       (or (and
+            (= emacs-major-version 19)
+            (>= emacs-minor-version 14))
+           (= emacs-major-version 20))
+       (fboundp 'load-options-file))
+  (load-options-file "/x/home/mimorgan/.xemacs-options")))
+;; ============================
+;; End of Options Menu Settings
+
+;; Set up file type recognition
+(setq auto-mode-alist (mapcar 'purecopy
+                              '(("\\.aml$" . sgml-mode)
+                                ("\\.cml$" . sgml-mode)
+                                ("\\.sml$" . sgml-mode)
+                                ("\\.xml$" . sgml-mode)
+                                ("\\.uil$" . c-mode)
+                                ("\\.uih$" . c-mode)
+                                ("\\.c$" . c-mode)
+                                ("\\.h$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.ndl$" . c++-mode)
+                                ("\\.twiki$" . twiki-mode)
+                                ("\\.tmpl$" . html-mode)
+                                ("\\.i$" . c++-mode)
+                                ("\\makefile$" . makefile-mode)
+                                ("\\Makefile$" . makefile-mode)
+                                ("\\Makefile.e$" . makefile-mode)
+                                ("\\Makefile.*\\.inc$" . makefile-mode)
+                                ("\\.java$" . java-mode)
+                                ("\\.html$" . html-mode)
+                                ("\\.tex$" . TeX-mode)
+                                ("\\.txi$" . Texinfo-mode)
+                                ("\\.el$" . emacs-lisp-mode)
+                                ("\\.py$" . python-mode)
+                                ("\\.a$" . c-mode))))
+
+
+;; Add my indentation style preferences and frame decorations.
+(defun myke-common-hook ()
+  ;; use bsd style for all C like languages
+;  (c-set-style "bsd")
+; Defined in mm-code-helpers for odd tabs+spaces indentation style.
+  (c-set-style "mm-paypal")
+  (setq tab-width 4)
+  ;; This makes tab only indent when at begin of non-whitespace.
+  ;; Useful for aligning parameters.
+  (setq c-tab-always-indent nil)
+
+  (define-key c++-mode-map "\C-m" 'newline-and-indent)
+  (define-key c-mode-map "\C-m"   'newline-and-indent)
+  (define-key c++-mode-map "\C-c\C-s" 'mm-c-insert-ifdef)
+  (define-key c-mode-map "\C-c\C-s"   'mm-c-insert-ifdef)
+  (define-key c++-mode-map "\C-\M-y" 'mm-yank-and-indent)
+  (define-key c-mode-map "\C-\M-y"   'mm-yank-and-indent)
+
+  (font-lock-mode 1)
+  )
+
+(defun myke-c-mode-hook ()
+;; C work (typically kernel code) requires using tabs and special
+;;  indentations. *sigh*
+  (c-set-offset 'arglist-cont-nonempty '*)
+  (c-set-offset 'arglist-cont '*)
+  (c-set-offset 'statement-cont '*)
+  )
+
+(defun myke-c++-mode-hook ()
+  ;; other customizations can go here
+
+  ;; Make the offset the current tab width instead of some fixed
+  ;; number of spaces. This is an attempt to be a good citizen living
+  ;; in a "using tabs not spaces" environment.  Logic being, indent
+  ;; always is a tab-multiple, and so there should never be necessary
+  ;; spaces to make things look odd in different tab widths.
+  (setq	c-basic-offset tab-width
+	;; Make sure tabs are used instead of spaces (nil to force no tabs)
+	indent-tabs-mode t)
+
+  ;; Don't try to line up arguments under other arguments (like C-mode).
+  ;; This is because in a tab-environment, this will make things look
+  ;; hokey because the odd distance indent uses some spaces, and some
+  ;; people use different tab-widths... *double sigh*
+
+;  (c-set-offset 'arglist-cont-nonempty '+)
+;  (c-set-offset 'arglist-cont '+)
+;  (c-set-offset 'statement-cont '+)
+  )
+
+(defun myke-python-mode-hook ()
+  (setq indent-tabs-mode nil)
+  )
+
+; Since coding standards could be different, use two different styles
+; for c and c++ *sigh*
+(add-hook 'c-mode-common-hook 'myke-common-hook)
+(add-hook 'c-mode-hook 'myke-c-mode-hook)
+(add-hook 'c++-mode-hook 'myke-c++-mode-hook)
+(add-hook 'python-mode-hook 'myke-python-mode-hook)
+
+; Other way to do it:
+(add-hook 'lisp-mode-hook '(lambda () 
+			     (font-lock-mode 1)
+			     (setq indent-tabs-mode nil)))
+(add-hook 'emacs-lisp-mode-hook '(lambda () 
+				   (font-lock-mode 1)
+				   (setq indent-tabs-mode nil)))
+(add-hook 'html-mode-hook '(lambda () 
+			     (font-lock-mode 1)
+                             (setq tab-width 4)))
+
+(add-hook 'sgml-mode-hook '(lambda () 
+			     (font-lock-mode 1)
+                             (setq tab-width 4)))
+
+; No auto-fill for twiki pages.
+(defun twiki-mode ()
+  (auto-fill-mode 0))
+
+(add-hook 'python-mode-hook '(lambda () 
+			     (font-lock-mode 1)
+                             (setq tab-width 4)))
+
+;(add-hook 'text-mode-hook '(lambda () (line-number-mode 1)))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+(setq default-major-mode 'text-mode)
+(global-set-key [f9]        'other-window)
+(global-set-key [f10]       'other-frame)
+
+;; Turn on function display mode.
+;; Doesn't seem to work too well...
+;(which-function-mode)
+
+;; Autorevert package: Loads files that have been changed on disk.
+(if (locate-library "autorevert") 
+    (load-library "autorevert"))
+(autoload 'auto-revert-mode "autorevert" nil t)
+(autoload 'turn-on-auto-revert-mode "autorevert" nil nil)
+(autoload 'global-auto-revert-mode "autorevert" nil t)
+(global-auto-revert-mode 1)
+
+; Face to use for comments
+(require 'font-lock)
+;(set-face-foreground  'font-lock-comment-face       "red")
+
+; Face to use for function and variable names
+(set-face-foreground  'font-lock-function-name-face "blue4")
+(set-face-foreground  'font-lock-variable-name-face "blue4")
+
+; Face to use for strings and documentation strings
+(set-face-foreground  'font-lock-string-face        "green4")
+
+; Face to use for preprocessor commands
+;(set-face-foreground  'font-lock-preprocessor-face  "dark blue")
+
+;; Fill properly using the following. 
+;; Also see M-x apropos RET adaptive-fill RET
+;;(setq adaptive-fill-mode t)
+
+(custom-set-variables
+ '(ediff-package t)
+ '(c-support-package t)
+ '(c-indent-comments-syntactically-p t)
+ '(toolbar-mail-reader (quote not-configured))
+; '(compile-command "gmake -k ")
+; '(compile-command "m -j 8 ")
+ '(compile-command "mm make ")
+ '(user-mail-address "mimorgan@paypal.com" t)
+ '(query-user-mail-address nil))
+(custom-set-faces
+ '(default ((t (:family "Interface User" :size "14pt"))) t))
+
+(custom-set-faces
+;; '(font-lock-comment-face ((t (:italic t :foreground "Firebrick"))))
+ '(modeline ((t (:bold t :foreground "papayawhip" :background "cornsilk4"))))
+ '(font-lock-function-name-face ((t (:bold t :foreground "Blue")))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Terminal on Mac settings - fixup after setting everything else
+; Fix the custom-set-faces later...
+
+; Set my face to be the dark background one by default.
+(mm-face-dark-background)
+
+; Emacs mode line somehow has forground and background flipped
+(set-face-background  'mode-line        "white")
+(set-face-foreground  'mode-line        "blue")
+
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+; Turn on the mouse wheel
+(mouse-wheel-mode)
+
+;; Require a final newline in a file, to avoid confusing some tools
+(setq require-final-newline t)
+
+;; ----------------------------------------------------------------------
+; igrep package
+;; ----------------------------------------------------------------------
+
+(autoload 'igrep "igrep"
+   "*Run `grep` PROGRAM to match EXPRESSION in FILES..." t)
+(autoload 'igrep-find "igrep"
+   "*Run `grep` via `find`..." t)
+(autoload 'igrep-visited-files "igrep"
+   "*Run `grep` ... on all visited files." t)
+(autoload 'dired-do-igrep "igrep"
+   "*Run `grep` on the marked (or next prefix ARG) files." t)
+(autoload 'dired-do-igrep-find "igrep"
+   "*Run `grep` via `find` on the marked (or next prefix ARG) directories." t)
+(autoload 'Buffer-menu-igrep "igrep"
+  "*Run `grep` on the files visited in buffers marked with '>'." t)
+(autoload 'igrep-insinuate "igrep"
+  "Define `grep' aliases for the corresponding `igrep' commands." t)
+
+(autoload 'grep "igrep"
+   "*Run `grep` PROGRAM to match EXPRESSION in FILES..." t)
+(autoload 'egrep "igrep"
+   "*Run `egrep`..." t)
+(autoload 'fgrep "igrep"
+   "*Run `fgrep`..." t)
+(autoload 'agrep "igrep"
+   "*Run `agrep`..." t)
+(autoload 'grep-find "igrep"
+   "*Run `grep` via `find`..." t)
+(autoload 'egrep-find "igrep"
+   "*Run `egrep` via `find`..." t)
+(autoload 'fgrep-find "igrep"
+   "*Run `fgrep` via `find`..." t)
+(autoload 'agrep-find "igrep"
+   "*Run `agrep` via `find`..." t)
+
+; Useful grep-find command if igrep not loaded:
+; find . -type f '(' -name '*.cpp' -o -name '*.h' ')' -print0 | xargs -0 -e grep -n -e rates_address
+
+;; Project specific helper stuff
+(if (locate-library "mm-project-helpers") 
+    (load-library "mm-project-helpers"))

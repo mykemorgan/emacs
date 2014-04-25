@@ -1,4 +1,4 @@
 emacs
 =====
 
-custom emacs stuff
+Custom emacs elisp files for development.
