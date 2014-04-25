@@ -1,0 +1,11 @@
+# Don't save compiled emacs elisp files.
+*.elc
+
+# Emacs backup and recovery files
+*~
+\#*\#
+.\#*
+*~
+
+# Don't look at downloaded randomness
+emacs-extras
