@@ -48,6 +48,9 @@
 (if (locate-library "python-mode") 
     (load-library "python-mode"))
 
+(if (locate-library "json-mode") 
+    (load-library "json-mode"))
+
 ;; ClearCase interface
 ; ClearCase is dog-slow on dynamic views. Disabling 7/19/2006
 ;(if (locate-library "clearcase") 
