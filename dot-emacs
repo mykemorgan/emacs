@@ -48,6 +48,8 @@
 (if (locate-library "python-mode") 
     (load-library "python-mode"))
 
+; Ugh: requires 'js' (js-mode) and 'ex'. 
+; js-mode comes with emacs 23.2 apparently - might need to upgrade?
 (if (locate-library "json-mode") 
     (load-library "json-mode"))
 
