@@ -1,7 +1,6 @@
 ;; -*- emacs-lisp -*-
 ;;
 ;; mm ~/.emacs file.
-;; $Id: .emacs,v 1.15 2007/09/17 18:08:37 mimorgan Exp $
 ;; --
 
 ;; Load version control commands.
@@ -44,19 +43,18 @@
 (if (locate-library "mm-find-header-at-point") 
     (load-library "mm-find-header-at-point"))
 
+;; Special library just for my faces, colors, fonts
+(if (locate-library "mm-faces") 
+    (load-library "mm-faces"))
+
 ;; 
 (if (locate-library "python-mode") 
     (load-library "python-mode"))
 
-; Ugh: requires 'js' (js-mode) and 'ex'. 
-; js-mode comes with emacs 23.2 apparently - might need to upgrade?
-(if (locate-library "json-mode") 
-    (load-library "json-mode"))
-
-;; ClearCase interface
-; ClearCase is dog-slow on dynamic views. Disabling 7/19/2006
-;(if (locate-library "clearcase") 
-;    (load-library "clearcase"))
+; Ugh: requires 'js' (js-mode), 'ex', and 'json-reformat' Missing the last.
+; js-mode comes with emacs 23.2 - need to update shell version?
+;(if (locate-library "json-mode") 
+;    (load-library "json-mode"))
 
 ;; Perforce interface
 ;(if (locate-library "p4-8_5") 
@@ -213,6 +211,9 @@
 (add-hook 'sgml-mode-hook '(lambda () 
 			     (font-lock-mode 1)
                              (setq tab-width 4)))
+(add-hook 'java-mode-hook '(lambda () 
+			     (font-lock-mode 1)
+			     (setq indent-tabs-mode nil)))
 
 ; No auto-fill for twiki pages.
 (defun twiki-mode ()
@@ -241,23 +242,6 @@
 (autoload 'global-auto-revert-mode "autorevert" nil t)
 (global-auto-revert-mode 1)
 
-;
-; M-x list-faces-display lists all faces and allows to change!
-;
-; Face to use for comments
-(require 'font-lock)
-;(set-face-foreground  'font-lock-comment-face       "red")
-
-; Face to use for function and variable names
-(set-face-foreground  'font-lock-function-name-face "blue4")
-(set-face-foreground  'font-lock-variable-name-face "blue4")
-
-; Face to use for strings and documentation strings
-(set-face-foreground  'font-lock-string-face        "green4")
-
-; Face to use for preprocessor commands
-;(set-face-foreground  'font-lock-preprocessor-face  "dark blue")
-
 ;; Fill properly using the following. 
 ;; Also see M-x apropos RET adaptive-fill RET
 ;;(setq adaptive-fill-mode t)
@@ -268,33 +252,9 @@
  '(c-indent-comments-syntactically-p t)
  '(toolbar-mail-reader (quote not-configured))
 ; '(compile-command "gmake -k ")
-; '(compile-command "m -j 8 ")
  '(compile-command "mm make ")
  '(user-mail-address "mimorgan@paypal.com" t)
  '(query-user-mail-address nil))
-(custom-set-faces
- '(default ((t (:family "Interface User" :size "14pt"))) t))
-
-(custom-set-faces
-;; '(font-lock-comment-face ((t (:italic t :foreground "Firebrick"))))
- '(modeline ((t (:bold t :foreground "papayawhip" :background "cornsilk4"))))
- '(font-lock-function-name-face ((t (:bold t :foreground "Blue")))))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Terminal on Mac settings - fixup after setting everything else
-; Fix the custom-set-faces later...
-
-; Set my face to be the dark background one by default.
-(mm-face-dark-background)
-
-; Emacs mode line somehow has forground and background flipped
-(set-face-background  'mode-line        "white")
-(set-face-foreground  'mode-line        "blue")
-
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 ; Turn on the mouse wheel
 (mouse-wheel-mode)

@@ -1,8 +1,5 @@
 ;; -*- emacs-lisp -*-
 ;;
-;; ~/emacs/mm-code-helpers file.
-;; $Id: mm-code-helpers.el,v 1.19 2005/02/15 23:36:14 mimorgan Exp $
-;;
 ;; Example macro for F2 key:
 ;(defun my-save-buffer-and-tex-file ()
 ; (interactive)
@@ -166,42 +163,6 @@ The user is prompted for <macro> in the minibuffer."
   (interactive)
   (scroll-up -1)
   (next-line -1))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; Faces for light backgrounds
-(defun mm-face-light-background ()
-  "Set the font-lock faces for emacsen with light backgrounds."
-  (interactive)
-  (set-face-foreground  'font-lock-function-name-face "blue4")
-  (set-face-foreground  'font-lock-variable-name-face "blue4")
-  (set-face-foreground  'font-lock-string-face        "green4")
-  (set-face-foreground  'font-lock-builtin-face       "black")
-;  (set-face-foreground  'p4-depot-added-face          "darkgreen")
-;  (set-face-foreground  'p4-depot-deleted-face        "red4")
-  )
-
-
-; Faces for dark backgrounds.
-(defun mm-face-dark-background ()
-  "Set the font-lock faces for emacsen with dark backgrounds."
-  (interactive)
-  (set-face-foreground  'font-lock-function-name-face "yellow")
-  (set-face-foreground  'font-lock-variable-name-face "cyan")
-  (set-face-foreground  'font-lock-string-face        "green2")
-  (set-face-foreground  'font-lock-builtin-face       "white")
-;  (set-face-foreground  'p4-depot-added-face          "green2")
-;  (set-face-foreground  'p4-depot-deleted-face        "red")
-;  (set-face-foreground  'p4-depot-unmapped-face       "yellow")
-;  (set-face-foreground  'p4-diff-change-face          "red")
-;  (set-face-foreground  'p4-diff-ins-face             "green")
-;  (set-face-foreground  'p4-diff-del-face             "palegreen")
-;  (set-face-foreground  'p4-diff-head-face            "red")
-;  (set-face-foreground  'p4-diff-file-face            "black")
-;  (set-face-background  'p4-diff-file-face            "gray65")
-  (set-cursor-color "yellow"))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; From mgainer, fixed by myke for some special cases.
