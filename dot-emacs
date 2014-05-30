@@ -241,6 +241,9 @@
 (autoload 'global-auto-revert-mode "autorevert" nil t)
 (global-auto-revert-mode 1)
 
+;
+; M-x list-faces-display lists all faces and allows to change!
+;
 ; Face to use for comments
 (require 'font-lock)
 ;(set-face-foreground  'font-lock-comment-face       "red")
