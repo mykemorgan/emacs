@@ -46,9 +46,9 @@
      (>= emacs-major-version 23))
     (set-face-foreground  'font-lock-preprocessor-face  "dark blue"))
 
-; This seems to be the only way to set "bold" properties?
+; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
- '(default ((t (:family "Courier New" :size "14"))))
+ '(default ((t (:family "Courier New" :height 140))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
 ; '(font-lock-function-name-face ((t (:bold t :foreground "pink"))))
  '(modeline ((t (:bold t :foreground "black" :background "goldenrod"))))
