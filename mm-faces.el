@@ -51,9 +51,9 @@
  '(default ((t (:family "Courier New" :height 140))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
 ; '(font-lock-function-name-face ((t (:bold t :foreground "pink"))))
- '(modeline ((t (:bold t :foreground "black" :background "goldenrod"))))
- '(modeline-buffer-id ((t (:bold t :foreground "red"))))
- '(modeline-inactive ((t (:foreground "black" :background "goldenrod"))))
+ '(mode-line ((t (:bold t :foreground "black" :background "goldenrod"))))
+ '(mode-line-buffer-id ((t (:bold t :foreground "red"))))
+ '(mode-line-inactive ((t (:foreground "black" :background "goldenrod"))))
  )
 
 ;; Mac specific settings
