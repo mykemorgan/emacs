@@ -58,7 +58,7 @@
   (end-of-line)
   (backward-char 5))
 
-(global-set-key [f3] 'mm-add-new-flow-state)
+;(global-set-key [f3] 'mm-add-new-flow-state)
 
 ;; Add a new c++ class, complete with ccdoc header to fill in.
 ;; XXX/mm It would be really nice to add the class name too!
@@ -87,7 +87,7 @@
   (indent-according-to-mode)
   (end-of-line))
 
-(global-set-key [f4] 'mm-add-ccdoc-class)
+;(global-set-key [f4] 'mm-add-ccdoc-class)
 
 ;; Add a new ccdoc c++ method comment.
 (defun mm-add-ccdoc-method ()
@@ -105,7 +105,7 @@
   (previous-line 5)
   (end-of-line))
 
-(global-set-key [f5] 'mm-add-ccdoc-method)
+;(global-set-key [f5] 'mm-add-ccdoc-method)
 
 ;; Add a function to easily #define out a marked region.
 ;; From the newsgroup comp.emacs.sources
@@ -163,6 +163,21 @@ The user is prompted for <macro> in the minibuffer."
   (interactive)
   (scroll-up -1)
   (next-line -1))
+
+
+; Helper to set the tab width properly, while also telling C-modes to
+; update their idea of how much to indent (one tab).
+(defun mm-set-tab-width (width)
+"Set the tab-width for the file, and then set the c-basic-offset
+to that same tab width.
+
+This facilitates c-mode code formatting rules that indent using a set
+number of tabs and want to play nice with adjusting the tab-width
+after the file has been loaded"
+  (interactive "nDesired tab-width: ")
+  (setq tab-width width
+        c-basic-offset tab-width)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; From mgainer, fixed by myke for some special cases.

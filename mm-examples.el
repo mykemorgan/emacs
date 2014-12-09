@@ -11,11 +11,16 @@ Test elisp function for goofing around.
 "
   (interactive)
   (let (
-        (mystring (read-string "Foo: " "INITIAL"))
         (begin "Beginning")
         )
-    (print (concat "String: " mystring " Begin: " begin)))
-)
+    (let (
+          (end (concat begin "End"))
+          )
+      (print (concat "begin: " begin " End: " end))
+      )
+    )
+  )
+
 
 ;
 ; Test simple interactive function.
