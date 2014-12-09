@@ -1,6 +1,7 @@
 ;; -*- emacs-lisp -*-
 ;;
-;; 
+;; Oops, See also: mm-examples.el
+;
 
 (defun find-header-at-point ()
   "Test new function."
