@@ -1,12 +1,12 @@
 ;; -*- emacs-lisp -*-
 ;;
 ;; 
-; XXX/mm Will (current-word) help to get a fill filename type string
-; within quotes instead of all this?
 ;                                                                                                       
 
 
 ; Return the prefix of the given include file
+; XXX/mm Feature request: auto-find the C++ headers as well.
+; They seem to be in /usr/include/c++/<version>/
 (defun mm-get-include-file-prefix (file type)
   "
 Examine the FILE assuming its an #include directive file name and attempt
@@ -33,7 +33,8 @@ Common root directories will be determined by:
            "~/repositories/infra/all")
           ((eq t (compare-strings "ifeature" nil nil file nil 8))
            "~/repositories/infra/all")
-          (t "/usr/include"))
+          (t "/usr/include")
+          )
     )
   )
 
@@ -51,41 +52,154 @@ Common root directories will be determined by:
     )
   )
 
+
 (defun mm-find-header-at-point ()
   "
-Find and load the given header file around the current point.
+Find and load the given header filename around the current point.
 If set, prepends $BUILDTOP/ from environment to the name of the file.
 If file does not exist, do not try to create it.
 "
   (interactive)
-  (save-excursion
-    (skip-chars-backward "^\"<\n")
-                                        ; Did we find a " or newline or begin of file
-    (if (and (> (point) 1)
-             (or (= (char-before) ?\") (= (char-before) ?<)))
-        (let (
-              (filename-begin (point))        ; Save the beginning of file
-              (type-of-header (char-before))  ; Save the way #include includes the header
-              )
-          (skip-chars-forward "^\">\n")
-                                        ; Did we find a " or newline or end of file.
-          (if (and (< (point) (1+ (buffer-size)))
-                   (or (= (char-after) ?\") (= (char-after) ?>)))
-                                        ; Add the file prefix we believe is correct
-              (let ((header (buffer-substring-no-properties filename-begin (point))))
-                (let ((path (mm-get-include-file-prefix header type-of-header)))
-                  (let ((filename (concat path (if path "/") header)))
-                    (message "Trying to load header file: %s" filename)
+  (let ((delim (mm-find-enclosing-header-delimiter)))
+    (if delim
+        (save-excursion
+          (let ((header (mm-get-enclosed-string delim)))
+            (let ((path (mm-get-include-file-prefix header delim)))
+              (let ((filename (concat path (if path "/") header)))
                                         ; Only bother trying to load if it exists already
-                    (if (file-exists-p filename)
-                        (find-file filename)
-                      (message "Failed to load. File does not exist: %s" filename)
-                      )
+                (if (file-exists-p filename)
+                    (progn (find-file filename)
+                           (message "Loaded header file: %s" filename))
+                  (message "Failed to load. File does not exist: %s" filename)
+                  )
+                )
+              )
+            )
+          )
+      )
+    )
+  )
+
+;----------------------------------------------------------------------
+; Test Data in which to park your point when calling this function
+; Success: "Sample string in quotes"
+; Success: <Sample string in less/greater than>
+; Fail: [Sample string in square brackets]
+; Fail: {Sample string in curly brackets}
+; (The fails are due to mm-find-enclosing-header-delimiter not yet looking
+;  for the brackets).
+;----------------------------------------------------------------------
+(defun mm-test-find-enclosed-string ()
+  "
+Test the get enclosing delimiter and get enclosed string
+functions. Displays the delimiter for and string it finds
+given the current point.
+"
+  (interactive)
+  (let ((delim (mm-find-enclosing-header-delimiter)))
+    (if delim
+        (message "Found Delim [%c]\nFound string [%s]"
+                 delim
+                 (mm-get-enclosed-string delim))
+      (message "Didn't find a begin or possibly an end")
+        )
+    )
+  )
+
+(defun mm-get-enclosed-string (&optional delim-begin &optional delim-end)
+  "
+Get the string enclosed by the delimiters delim-begin and delim-end.
+Both delimiters are optional: see below for behvior if they are nil.
+Returns nil if such a string does not exist all on a single line.
+
+If delim-begin is nil, sets it to &\"
+Then, if delim-end is nil, sets delim-end based on delim-begin:
+delim-begin  delim-end
+    ?\"           ?\"
+    ?<           ?>
+    ?[           ?]
+    ?{           ?}
+"
+  (interactive)
+  (setq delim-begin (if delim-begin delim-begin ?\"))
+  (setq delim-end (if delim-end
+                      (delim-end)
+                    (cond ((eq delim-begin ?\") delim-begin)
+                          ((eq delim-begin ?<) ?>)
+                          ((eq delim-begin ?[) ?])
+                          ((eq delim-begin ?{) ?})
+                          )
+                    ))
+  (if delim-end
+      (let (
+            (back-search (concat "^\n" (string delim-begin)))
+            (fwd-search (concat "^\n" (string delim-end)))
+            )
+                                        ; do the stuff
+        (save-excursion
+          (skip-chars-backward back-search)
+                                        ; Did we find a begin thing?
+          (if (and (> (point) 1) (= (char-before) delim-begin))
+              (let (
+                    (name-begin (point)) ; Save the beginning of string
                     )
+                (skip-chars-forward fwd-search)
+                                        ; Did we find a " or newline or end of file.
+                (if (and (< (point) (1+ (buffer-size)))
+                         (= (char-after) delim-end))
+                                        ; Extract the name between delims
+                    (buffer-substring-no-properties name-begin (point))
                   )
                 )
             )
+          )
+        )
+    nil
+    )
+  )
+
+(defun mm-find-enclosing-header-delimiter ()
+  "
+Find and return the 'header file delimiter' surrounding the current
+point.
+\"mydir/myheader.h\"   - returns &\"
+<asm/ioctl.h>         - returns &<
+
+If no end-region character is found appropriate to the begin-region
+character, returns nil.
+For now, only finds delimiters surrounding the point on the same
+line as the point.
+"
+  (interactive)
+  (save-excursion
+    (skip-chars-backward "^\"<\n")
+                                        ; Did we find a begin-char or newline / begin of file
+    (if (and (> (point) 1)
+             (or (= (char-before) ?\") (= (char-before) ?<)))
+        (let (
+              (found-delim-begin (char-before))
+              )
+          (skip-chars-forward "^\">\n")
+                                        ; Did we find an end-char or newline / end of file.
+          (if (and (< (point) (1+ (buffer-size)))
+                   (or (= (char-after) ?\") (= (char-after) ?>)))
+              (let (
+                    (found-delim-end (char-after))
+                    )
+                ; Make sure the begin char matches the end char
+                (cond ((and (= found-delim-begin ?\")
+                            (= found-delim-end ?\"))
+                       found-delim-begin)
+                      ((and (= found-delim-begin ?<)
+                            (= found-delim-end ?>))
+                       found-delim-begin)
+                      ((t nil))
+                      )
+                )
+            )
          )
+      ; Couldn't find a begin char
+      nil
       )
     )
   )

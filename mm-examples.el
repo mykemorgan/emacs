@@ -16,7 +16,7 @@ Test elisp function for goofing around.
     (let (
           (end (concat begin "End"))
           )
-      (print (concat "begin: " begin " End: " end))
+      (message "Current word: %s" (current-word))
       )
     )
   )
