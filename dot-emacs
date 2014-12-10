@@ -186,10 +186,6 @@
 ;  (c-set-offset 'statement-cont '+)
   )
 
-(defun myke-python-mode-hook ()
-  (setq indent-tabs-mode nil)
-  )
-
 ; Since coding standards could be different, use two different styles
 ; for c and c++ *sigh*
 (add-hook 'c-mode-common-hook 'myke-common-hook)
@@ -197,17 +193,30 @@
 (add-hook 'c++-mode-hook 'myke-c++-mode-hook)
 (add-hook 'python-mode-hook 'myke-python-mode-hook)
 
+; Get key bidings in emacs list mode as well...
+
+
+;; elisp indentation style preferences and frame decorations.
+(defun myke-elisp-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent)
+  (define-key emacs-lisp-mode-map "\C-c\C-c" 'comment-region)
+  (font-lock-mode 1)
+)
+(add-hook 'emacs-lisp-mode-hook 'myke-elisp-hook)
+;; (add-hook 'emacs-lisp-mode-hook '(lambda ()
+;; 				   (font-lock-mode 1)
+;; 				   (setq indent-tabs-mode nil)))
+
+
 ; Other way to do it:
 (add-hook 'lisp-mode-hook '(lambda () 
 			     (font-lock-mode 1)
 			     (setq indent-tabs-mode nil)))
-(add-hook 'emacs-lisp-mode-hook '(lambda () 
-				   (font-lock-mode 1)
-				   (setq indent-tabs-mode nil)))
 (add-hook 'html-mode-hook '(lambda () 
 			     (font-lock-mode 1)
                              (setq tab-width 4)))
-
 (add-hook 'sgml-mode-hook '(lambda () 
 			     (font-lock-mode 1)
                              (setq tab-width 4)))
@@ -218,6 +227,10 @@
 ; No auto-fill for twiki pages.
 (defun twiki-mode ()
   (auto-fill-mode 0))
+
+(defun myke-python-mode-hook ()
+  (setq indent-tabs-mode nil)
+  )
 
 (add-hook 'python-mode-hook '(lambda () 
 			     (font-lock-mode 1)
