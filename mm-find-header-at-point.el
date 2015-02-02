@@ -7,6 +7,19 @@
 ; Return the prefix of the given include file
 ; XXX/mm Feature request: auto-find the C++ headers as well.
 ; They seem to be in /usr/include/c++/<version>/
+;
+; This should be done by having a "config variable" which is setq'able
+; to contain a list of header directories to search. This way can be
+; user-customizable. Would allow others to use and point to their own
+; infra repos as well, for exmaple.
+;
+; And/Or, a list of string prefixes that signal which "system"
+; location to search, like I do manually with the "infra" and
+; "ifeature" below.
+;
+; Or, should I be doing all this by building an actual filename and
+; checking if it exists like the caller of this function?
+;
 (defun mm-get-include-file-prefix (file type)
   "
 Examine the FILE assuming its an #include directive file name and attempt
@@ -172,6 +185,7 @@ line as the point.
 "
   (interactive)
   (save-excursion
+    ; XXX/mm add single-quotes? Seems to be used in oml files.
     (skip-chars-backward "^\"<\n")
                                         ; Did we find a begin-char or newline / begin of file
     (if (and (> (point) 1)
@@ -179,6 +193,7 @@ line as the point.
         (let (
               (found-delim-begin (char-before))
               )
+          ; XXX/mm Should only skip forward until the appropriate end-string character?
           (skip-chars-forward "^\">\n")
                                         ; Did we find an end-char or newline / end of file.
           (if (and (< (point) (1+ (buffer-size)))
