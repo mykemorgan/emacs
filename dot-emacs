@@ -26,12 +26,12 @@
 ;; to restore need to load desktop file and execute buffer.
 ; See:
 ; http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
-; (desktop-save-mode 1) might get this to auto-restore.
 ;
 ; Be careful about turning it on universally because then every time
 ; EDITOR is invoked (i.e. on commits), it will load everything.
 (if (locate-library "desktop") 
     (load-library "desktop"))
+;(desktop-save-mode 1) ;might get this to auto-restore.
 
 ;; RFC location package
 (if (locate-library "RFC-find") 
@@ -42,6 +42,9 @@
     (load-library "mm-code-helpers"))
 (if (locate-library "mm-find-header-at-point") 
     (load-library "mm-find-header-at-point"))
+
+(if (locate-library "mm-json-format-region") 
+    (load-library "mm-json-format-region"))
 
 ;; Special library just for my faces, colors, fonts
 (if (locate-library "mm-faces") 
