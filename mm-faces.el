@@ -17,6 +17,7 @@
   (set-face-foreground  'font-lock-type-face          "blue4")
   (set-face-foreground  'font-lock-string-face        "green4")
   (set-face-foreground  'font-lock-builtin-face       "black")
+;  (set-face-foreground  'minibuffer-prompt            "black")
   (set-cursor-color "blue")
   )
 
@@ -29,6 +30,7 @@
   (set-face-foreground  'font-lock-type-face          "cyan")
   (set-face-foreground  'font-lock-string-face        "green2")
   (set-face-foreground  'font-lock-builtin-face       "white")
+  (set-face-foreground  'minibuffer-prompt            "white")
   (set-cursor-color "yellow")
 )
 
@@ -51,17 +53,23 @@
  '(default ((t (:family "Courier New" :height 140))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
  '(font-lock-function-name-face ((t (:bold t))))
- '(mode-line ((t (:bold t :foreground "black" :background "goldenrod"))))
- '(mode-line-buffer-id ((t (:bold t :foreground "red"))))
- '(mode-line-inactive ((t (:foreground "black" :background "goldenrod"))))
+ '(mode-line ((t (:bold t :foreground "black" :background "pink"))))
+ '(mode-line-inactive ((t (:foreground "black" :background "gray60"))))
+; '(mode-line-inactive ((t (:foreground "black" :background "goldenrod"))))
+ '(mode-line-buffer-id ((t (:bold t :foreground "darkgreen"))))
+ '(minibuffer-prompt ((t (:bold t))))
  )
 
 ;; Mac specific settings
-(if (eq system-type 'darwin) ;; mac specific settings. really, laptop settings
-  (mm-face-light-background)
+(if (eq system-type 'darwin)
+    ;; mac specific settings. really, window-ized emacs settings
+    (mm-face-light-background)
+  ;; else probably in a terminal... Assume dark?
+  ;; Is there a way to query the terminal background color?
   (mm-face-dark-background)
-  ; Oddly enough, on linux/21.4.1 the mode face fore/background are reversed???
+  ;; Oddly enough, on linux/21.4.1 the mode face fore/background are reversed???
   (set-face-background  'mode-line "white")
+  (set-face-background  'mode-line-inactive "gray60")
   (set-face-foreground  'mode-line "blue")
   )
 
