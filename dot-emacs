@@ -135,6 +135,8 @@
                                 ("\\.txi$" . Texinfo-mode)
                                 ("\\.el$" . emacs-lisp-mode)
                                 ("\\.py$" . python-mode)
+                                ("\\.pig$" . sql-mode)
+                                ("\\.json$" . js-mode)
                                 ("\\.a$" . c-mode))))
 
 
