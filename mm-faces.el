@@ -30,26 +30,29 @@
   (set-face-foreground  'font-lock-type-face          "cyan")
   (set-face-foreground  'font-lock-string-face        "green2")
   (set-face-foreground  'font-lock-builtin-face       "white")
-  (set-face-foreground  'minibuffer-prompt            "white")
+  (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
+          (>= emacs-major-version 23))
+      (set-face-foreground  'minibuffer-prompt "white")
+    )
   (set-cursor-color "yellow")
 )
 
 ; Variables and their types
 
-; Face to use for strings and documentation strings
+;; Face to use for strings and documentation strings
 (set-face-foreground  'font-lock-string-face        "green4")
 
-; Face to use for preprocessor commands. 
-; I can only see preprocessor face on my 22.1 emacs and later.
-(if (or
-     (and 
-      (>= emacs-major-version 22)
-      (>= emacs-minor-version 1))
-     (>= emacs-major-version 23))
+; There are many new faces in emacs version 22.1 and later.
+(if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
+        (>= emacs-major-version 23))
     (progn
+      ;; Face to use for preprocessor commands.
       (set-face-foreground  'font-lock-preprocessor-face  "dark blue")
       (custom-set-faces
        '(minibuffer-prompt ((t (:bold t))))
+       '(mode-line-inactive ((t (:foreground "black" :background "gray60"))))
+;       '(mode-line-inactive ((t (:foreground "black" :background "goldenrod"))))
+       '(mode-line-buffer-id ((t (:bold t :foreground "darkgreen"))))
        )
       )
   )
@@ -60,10 +63,6 @@
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
  '(font-lock-function-name-face ((t (:bold t))))
  '(mode-line ((t (:bold t :foreground "black" :background "pink"))))
- '(mode-line-inactive ((t (:foreground "black" :background "gray60"))))
-; '(mode-line-inactive ((t (:foreground "black" :background "goldenrod"))))
- '(mode-line-buffer-id ((t (:bold t :foreground "darkgreen"))))
- '(minibuffer-prompt ((t (:bold t))))
  )
 
 ;; Mac specific settings
@@ -75,7 +74,10 @@
   (mm-face-dark-background)
   ;; Oddly enough, on linux/21.4.1 the mode face fore/background are reversed???
   (set-face-background  'mode-line "white")
-  (set-face-background  'mode-line-inactive "gray60")
+  (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
+          (>= emacs-major-version 23))
+      (set-face-background  'mode-line-inactive "gray60")
+    )
   (set-face-foreground  'mode-line "blue")
   )
 
