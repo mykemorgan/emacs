@@ -46,7 +46,13 @@
       (>= emacs-major-version 22)
       (>= emacs-minor-version 1))
      (>= emacs-major-version 23))
-    (set-face-foreground  'font-lock-preprocessor-face  "dark blue"))
+    (progn
+      (set-face-foreground  'font-lock-preprocessor-face  "dark blue")
+      (custom-set-faces
+       '(minibuffer-prompt ((t (:bold t))))
+       )
+      )
+  )
 
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
