@@ -198,15 +198,13 @@
 (add-hook 'c++-mode-hook 'myke-c++-mode-hook)
 (add-hook 'python-mode-hook 'myke-python-mode-hook)
 
-; Get key bidings in emacs list mode as well...
-
-
-;; elisp indentation style preferences and frame decorations.
+;; elisp mode customizations and bindings
 (defun myke-elisp-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
   (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent)
   (define-key emacs-lisp-mode-map "\C-c\C-c" 'comment-region)
+  (define-key emacs-lisp-mode-map "\C-\M-y" 'mm-yank-and-indent)
   (font-lock-mode 1)
 )
 (add-hook 'emacs-lisp-mode-hook 'myke-elisp-hook)
@@ -322,3 +320,17 @@
 ;; Project specific helper stuff
 (if (locate-library "mm-project-helpers") 
     (load-library "mm-project-helpers"))
+
+;; Markdown mode package
+;; emacs v22.1.1 seems to have trouble with the keyword ":safe" used in markdown.
+;; Markdown package says it's mostly tested on v24 and higher.
+;; Yet another reason to upgrade the command-line emacs.
+(when (>= emacs-major-version 24)
+    (if (locate-library "markdown-mode")
+        (load-library "markdown-mode"))
+    (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+
+    (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode)) ; GitHub markdown
+  )

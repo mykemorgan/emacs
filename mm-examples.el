@@ -1,9 +1,19 @@
 ;; -*- emacs-lisp -*-
 ;;
 ;; 
-;
+;;
 ; elisp file for playing around and learning/debugging.
-;
+;;
+;; Some random commands or packages to look up/explore later:
+;;
+;; longlines-mode
+;; visual-line-mode
+;; - Maybe one of those will change to the behavior I want to C-n and C-p with lines that wrap
+;;
+;; markdown-mode.el
+;; - has gfm-mode for GitHub markdown as well.
+;;
+
 
 (defun mm-test ()
   "
