@@ -191,12 +191,25 @@
 ;  (c-set-offset 'statement-cont '+)
   )
 
+(defun myke-xml-mode-hook ()
+  (auto-fill-mode 0)
+
+  (setq tab-width 4)
+  ;; This makes tab indent the line even mid-line.
+  (setq c-tab-always-indent t)
+
+  (setq c-basic-offset tab-width
+	;; Make sure tabs are used instead of spaces (nil to force no tabs)
+	indent-tabs-mode nil)
+  )
+
 ; Since coding standards could be different, use two different styles
 ; for c and c++ *sigh*
 (add-hook 'c-mode-common-hook 'myke-common-hook)
 (add-hook 'c-mode-hook 'myke-c-mode-hook)
 (add-hook 'c++-mode-hook 'myke-c++-mode-hook)
 (add-hook 'python-mode-hook 'myke-python-mode-hook)
+(add-hook 'sgml-mode-hook 'myke-xml-mode-hook)
 
 ;; elisp mode customizations and bindings
 (defun myke-elisp-hook ()
