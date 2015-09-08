@@ -137,6 +137,7 @@
                                 ("\\.py$" . python-mode)
                                 ("\\.pig$" . sql-mode)
                                 ("\\.json$" . js-mode)
+                                ("\\.js$" . js-mode)
                                 ("\\.a$" . c-mode))))
 
 
@@ -203,6 +204,14 @@
 	indent-tabs-mode nil)
   )
 
+(defun myke-js-mode-hook ()
+  (font-lock-mode 1)
+  (setq indent-tabs-mode nil)
+  (setq tab-width 4)
+  (define-key js-mode-map "\C-c\C-c" 'comment-region)
+  (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
+  )
+
 ; Since coding standards could be different, use two different styles
 ; for c and c++ *sigh*
 (add-hook 'c-mode-common-hook 'myke-common-hook)
@@ -210,6 +219,7 @@
 (add-hook 'c++-mode-hook 'myke-c++-mode-hook)
 (add-hook 'python-mode-hook 'myke-python-mode-hook)
 (add-hook 'sgml-mode-hook 'myke-xml-mode-hook)
+(add-hook 'js-mode-hook 'myke-js-mode-hook)
 
 ;; elisp mode customizations and bindings
 (defun myke-elisp-hook ()
