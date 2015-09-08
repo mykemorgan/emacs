@@ -59,7 +59,8 @@
 
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
- '(default ((t (:family "Courier New" :height 140))))
+ '(default ((t (:family "Courier New" :height 160))))
+; '(default ((t (:family "Courier New" :height 140))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
  '(font-lock-function-name-face ((t (:bold t))))
  '(mode-line ((t (:bold t :foreground "black" :background "pink"))))
