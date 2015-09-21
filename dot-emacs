@@ -3,6 +3,25 @@
 ;; mm ~/.emacs file.
 ;; --
 
+;; ----------------------------------------------------------------------
+;; Further Emacs setup to do (updated 2015-09-21)
+;;
+;; - web mode for html (including dust templates)
+;; - javascript mode
+;; - javascript completion
+;; - javascript refactoring
+;; - javascript syntax checker
+;; - JS tag mode package
+;; - code folding (block hiding)
+;; - auto-completion
+;; - snippets (auto-insertion repeated keystrokes I think)
+;; - Set up/use a real package manager so to not checkin other open source
+;;   packages?
+;;
+;; - git package?
+;; ----------------------------------------------------------------------
+
+
 ;; Load version control commands.
 ;(vc-load-vc-hooks)
 
@@ -40,9 +59,9 @@
 ;; mm-code-helpers contains most of the 'mm-XXX' elisp functions.
 (if (locate-library "mm-code-helpers") 
     (load-library "mm-code-helpers"))
+;; Then I was smart and put one "package" per file.
 (if (locate-library "mm-find-header-at-point") 
     (load-library "mm-find-header-at-point"))
-
 (if (locate-library "mm-json-format-region") 
     (load-library "mm-json-format-region"))
 
@@ -81,12 +100,6 @@
 ;(global-set-key [f9] 'end-kbd-macro)
 ;(global-set-key [f10] 'call-last-kbd-macro)
 ;(global-set-key [f11] 'compile)
-; Need to make the (read-from-minibuffer "call" into a string? Maybe with let?
-;(global-set-key [f12] (lambda (tag) 
-;			(interactive 
-;			 (read-from-minibuffer "Apropos tag: " nil nil nil 
-;                                              minibuffer-history (current-word)))
-;			(tags-apropos tag)))
 
 (global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
 (global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
@@ -231,10 +244,6 @@
   (font-lock-mode 1)
 )
 (add-hook 'emacs-lisp-mode-hook 'myke-elisp-hook)
-;; (add-hook 'emacs-lisp-mode-hook '(lambda ()
-;; 				   (font-lock-mode 1)
-;; 				   (setq indent-tabs-mode nil)))
-
 
 ; Other way to do it:
 (add-hook 'lisp-mode-hook '(lambda () 
