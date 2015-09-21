@@ -159,7 +159,7 @@
   ;; use bsd style for all C like languages
 ;  (c-set-style "bsd")
 ; Defined in mm-code-helpers for odd tabs+spaces indentation style.
-  (c-set-style "mm-paypal")
+  (c-set-style "mm-tabs-and-spaces")
   (setq tab-width 4)
   ;; This makes tab only indent when at begin of non-whitespace.
   ;; Useful for aligning parameters.

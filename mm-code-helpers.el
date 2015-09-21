@@ -71,7 +71,7 @@
     (insert " // short explination.\n")
     (insert " // <begin long explination>\n")
     (insert " // \n")
-    (insert " // @author <a href=\"mailto:mimorgan@paypal.com\">myke morgan</a>\n")
+    (insert " // @author <a href=\"mailto:xxx@yyy.zzz\">myke morgan</a>\n")
     (insert " // @since \n")
     (insert " // @todo Everything\n")
     (insert " // @version 0.1\n")
@@ -249,9 +249,9 @@ after the file has been loaded"
     )
   )
 
-; Create a totally bizarre indentation style, just for PayPal code.
+; Create a hybrid indentation style:
 ; Tabs into the normal indentation level, then space into function
-; argument continuation lines.
-(c-add-style "mm-paypal" '("k&r" (c-basic-offset . 2) (c-special-indent-hook . tabs-and-spaces-indent)))
+; argument or logical continuation lines.
+(c-add-style "mm-tabs-and-spaces" '("k&r" (c-basic-offset . 2) (c-special-indent-hook . tabs-and-spaces-indent)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
