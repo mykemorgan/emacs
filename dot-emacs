@@ -56,6 +56,10 @@
 (if (locate-library "RFC-find") 
     (load-library "RFC-find"))
 
+;; mimimap sidebar (In ~/.emacs.d on the laptop)
+(if (locate-library "~/.emacs.d/elpa/minimap-1.2/minimap")
+    (load-library "~/.emacs.d/elpa/minimap-1.2/minimap"))
+
 ;; mm-code-helpers contains most of the 'mm-XXX' elisp functions.
 (if (locate-library "mm-code-helpers") 
     (load-library "mm-code-helpers"))

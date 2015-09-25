@@ -17,7 +17,10 @@
   (set-face-foreground  'font-lock-type-face          "blue4")
   (set-face-foreground  'font-lock-string-face        "green4")
   (set-face-foreground  'font-lock-builtin-face       "black")
-;  (set-face-foreground  'minibuffer-prompt            "black")
+  (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
+          (>= emacs-major-version 23))
+      (set-face-foreground  'minibuffer-prompt            "black")
+    )
   (set-cursor-color "blue")
   )
 
