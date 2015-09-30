@@ -155,6 +155,7 @@
                                 ("\\.pig$" . sql-mode)
                                 ("\\.json$" . js-mode)
                                 ("\\.js$" . js-mode)
+                                ("\\.sql$" . sql-mode)
                                 ("\\.a$" . c-mode))))
 
 
