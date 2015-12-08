@@ -155,6 +155,7 @@
                                 ("\\.pig$" . sql-mode)
                                 ("\\.json$" . js-mode)
                                 ("\\.js$" . js-mode)
+                                ("\\.css$" . css-mode)
                                 ("\\.sql$" . sql-mode)
                                 ("\\.a$" . c-mode))))
 
@@ -225,7 +226,7 @@
 (defun myke-js-mode-hook ()
   (font-lock-mode 1)
   (setq indent-tabs-mode nil)
-  (setq tab-width 4)
+  (setq tab-width 2)
   (define-key js-mode-map "\C-c\C-c" 'comment-region)
   (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
   )
