@@ -38,8 +38,7 @@
        (load-library "xemacs-packages")
        (message "Startup files loaded succesfully.")))
 
-; Always load the following libs
-
+;; ----------------------------------------------------------------------
 ;; Desktop package for restoring buffers on startup.
 ;; For now, needs to be activated manually to save, and
 ;; to restore need to load desktop file and execute buffer.
@@ -50,7 +49,25 @@
 ; EDITOR is invoked (i.e. on commits), it will load everything.
 (if (locate-library "desktop") 
     (load-library "desktop"))
-;(desktop-save-mode 1) ;might get this to auto-restore.
+(when (>= emacs-major-version 24)
+  (desktop-save-mode 1) ; auto-saves on exit, auto-loads on start
+  )
+
+;; Below all from Manual Sec. 43 "Saving Emacs Sessions" emacs v24.4.1
+;;
+;; desktop-revert     - goes back to a previous desktop.
+;; desktop-clear      - removes "all" buffers from desktop.
+;; desktop-change-dir - can be used to move to another desktop by dir.
+;; Basically loads the .emacs.desktop from given dir.
+;; Would be nice to be able to launch emacs from known dir.
+;; But on a non-command line this is tricky?
+;; DESKTOP-PATH specifies the directories to search when starting up.
+;; The first desktop file it finds is then used on startup.
+;; ----------------------------------------------------------------------
+
+
+;; Always load the following libs
+;; Think about needing to have all these 3rd party saved in my home dir...
 
 ;; RFC location package
 (if (locate-library "RFC-find") 
