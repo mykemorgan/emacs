@@ -22,6 +22,14 @@
       (set-face-foreground  'minibuffer-prompt            "black")
     )
   (set-cursor-color "blue")
+
+  ;; Some dynamically displayed faces
+  ;; the 'current' isearch item
+  (set-face-background  'isearch                      "palevioletred2")
+  (set-face-foreground  'isearch                      "black")
+  ;; the 'next' isearch item
+  (set-face-background  'lazy-highlight               "palevioletred4")
+  ;;  (set-face-foreground  'lazy-highlight               "black")
   )
 
 ; Faces for dark backgrounds.
@@ -33,12 +41,22 @@
   (set-face-foreground  'font-lock-type-face          "cyan")
   (set-face-foreground  'font-lock-string-face        "green2")
   (set-face-foreground  'font-lock-builtin-face       "white")
+  (set-face-background  'show-paren-match             "lightblue")
+  (set-face-foreground  'show-paren-match             "black")
   (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
       (set-face-foreground  'minibuffer-prompt "white")
     )
   (set-cursor-color "yellow")
-)
+
+  ;; Some dynamically displayed faces
+  ; the 'current' isearch item
+  (set-face-background  'isearch                      "palevioletred2")
+  (set-face-foreground  'isearch                      "black")
+  ;; the 'next' isearch item
+  (set-face-background  'lazy-highlight               "gray65")
+;;  (set-face-foreground  'lazy-highlight               "black")
+  )
 
 ; Variables and their types
 
@@ -63,7 +81,14 @@
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
  '(default ((t (:family "Hack" :height 140))))
-; '(default ((t (:family "Courier New" :height 140))))
+ '(markdown-header-face ((t (:family "Hack" :bold t :foreground "yellow"))))
+ '(markdown-header-delimiter-face ((t (:inherit markdown-header-face))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :weight normal))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 160))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 180))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 200))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 240))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
  '(font-lock-function-name-face ((t (:bold t))))
  '(mode-line ((t (:bold t :foreground "black" :background "pink"))))
