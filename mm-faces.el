@@ -89,6 +89,8 @@
  '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 180))))
  '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 200))))
  '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 240))))
+ '(markdown-inline-code-face ((t (:family "Courier New" :height 150 :background "slategray4"))))
+ '(markdown-pre-face ((t (:family "Courier New" :height 150 :foreground "aquamarine" :background "slategray4"))))
  '(font-lock-comment-face ((t (:italic t :foreground "red"))))
  '(font-lock-function-name-face ((t (:bold t))))
  '(mode-line ((t (:bold t :foreground "black" :background "pink"))))
