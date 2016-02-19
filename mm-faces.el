@@ -19,7 +19,10 @@
   (set-face-foreground  'font-lock-builtin-face       "black")
   (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
-      (set-face-foreground  'minibuffer-prompt            "black")
+      (set-face-foreground  'minibuffer-prompt "black")
+    )
+  (if (>= emacs-major-version 23)
+      (set-face-foreground  'js2-function-param "SeaGreen")
     )
   (set-cursor-color "blue")
 
@@ -46,6 +49,9 @@
   (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
       (set-face-foreground  'minibuffer-prompt "white")
+    )
+  (if (>= emacs-major-version 23)
+      (set-face-foreground  'js2-function-param "SeaGreen3")
     )
   (set-cursor-color "yellow")
 

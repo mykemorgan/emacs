@@ -13,7 +13,9 @@
 ;; markdown-mode.el
 ;; - has gfm-mode for GitHub markdown as well.
 ;;
-
+;; One built-in package manager:
+;; M-x list packages
+;; Not sure where the packages get installed?
 
 (defun mm-test ()
   "

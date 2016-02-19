@@ -171,7 +171,7 @@
                                 ("\\.py$" . python-mode)
                                 ("\\.pig$" . sql-mode)
                                 ("\\.json$" . js-mode)
-                                ("\\.js$" . js-mode)
+                                ("\\.js$" . js2-mode)
                                 ("\\.css$" . css-mode)
                                 ("\\.sql$" . sql-mode)
                                 ("\\.a$" . c-mode))))
@@ -256,6 +256,7 @@
 (add-hook 'python-mode-hook 'myke-python-mode-hook)
 (add-hook 'sgml-mode-hook 'myke-xml-mode-hook)
 (add-hook 'js-mode-hook 'myke-js-mode-hook)
+(add-hook 'js2-mode-hook 'myke-js-mode-hook)
 
 ;; elisp mode customizations and bindings
 (defun myke-elisp-hook ()
