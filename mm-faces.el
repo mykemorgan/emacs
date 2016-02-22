@@ -21,9 +21,6 @@
           (>= emacs-major-version 23))
       (set-face-foreground  'minibuffer-prompt "black")
     )
-  (if (>= emacs-major-version 23)
-      (set-face-foreground  'js2-function-param "SeaGreen")
-    )
   (set-cursor-color "blue")
 
   ;; Some dynamically displayed faces
@@ -48,10 +45,7 @@
   (set-face-foreground  'show-paren-match             "black")
   (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
-      (set-face-foreground  'minibuffer-prompt "white")
-    )
-  (if (>= emacs-major-version 23)
-      (set-face-foreground  'js2-function-param "SeaGreen3")
+      (set-face-foreground  'minibuffer-prompt "gray80")
     )
   (set-cursor-color "yellow")
 
@@ -105,7 +99,7 @@
 ;; Mac specific settings
 (if (eq system-type 'darwin)
     ;; mac specific settings. really, window-ized emacs settings
-    (mm-face-light-background)
+    (mm-face-dark-background)
   ;; else probably in a terminal... Assume dark?
   ;; Is there a way to query the terminal background color?
   (mm-face-dark-background)
@@ -118,13 +112,3 @@
   (set-face-foreground  'mode-line "blue")
   )
 
-; Conditionals:
-; (if condition then-form else-forms)
-; then-form has to be (progn a b c) to do multiple things. Else can be multiple
-; (when condition a b c) is like (if condition (progn a b c) nil)
-
-; Examples of directly setting mode line colors
-;(set-face-background  'mode-line           "white")
-;(set-face-foreground  'mode-line           "blue")
-;(set-face-foreground  'mode-line-buffer-id "red")
-;(set-face-background  'mode-line-inactive  "gray")

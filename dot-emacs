@@ -4,26 +4,20 @@
 ;; --
 
 ;; ----------------------------------------------------------------------
-;; Further Emacs setup to do (updated 2015-09-21)
+;; Further Emacs setup to do (updated 2016-02-22)
 ;;
 ;; - web mode for html (including dust templates)
-;; - javascript mode
 ;; - javascript completion
 ;; - javascript refactoring
-;; - javascript syntax checker
 ;; - JS tag mode package
-;; - code folding (block hiding)
+;; - code folding (block hiding) (For JS supposedly js2-mode has this)
 ;; - auto-completion
 ;; - snippets (auto-insertion repeated keystrokes I think)
 ;; - Set up/use a real package manager so to not checkin other open source
-;;   packages?
+;;   packages? (M-x list packages good enough?)
 ;;
 ;; - git package?
 ;; ----------------------------------------------------------------------
-
-
-;; Load version control commands.
-;(vc-load-vc-hooks)
 
 (setq load-path (cons (expand-file-name "~/emacs/") load-path))
 (setq load-path (cons (expand-file-name "/x/home/mimorgan/emacs/") load-path))
@@ -37,34 +31,6 @@
 ;;       (load-library "xemacs-keys")
        (load-library "xemacs-packages")
        (message "Startup files loaded succesfully.")))
-
-;; ----------------------------------------------------------------------
-;; Desktop package for restoring buffers on startup.
-;; For now, needs to be activated manually to save, and
-;; to restore need to load desktop file and execute buffer.
-; See:
-; http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
-;
-; Be careful about turning it on universally because then every time
-; EDITOR is invoked (i.e. on commits), it will load everything.
-(if (locate-library "desktop") 
-    (load-library "desktop"))
-(when (>= emacs-major-version 24)
-  (desktop-save-mode 1) ; auto-saves on exit, auto-loads on start
-  )
-
-;; Below all from Manual Sec. 43 "Saving Emacs Sessions" emacs v24.4.1
-;;
-;; desktop-revert     - goes back to a previous desktop.
-;; desktop-clear      - removes "all" buffers from desktop.
-;; desktop-change-dir - can be used to move to another desktop by dir.
-;; Basically loads the .emacs.desktop from given dir.
-;; Would be nice to be able to launch emacs from known dir.
-;; But on a non-command line this is tricky?
-;; DESKTOP-PATH specifies the directories to search when starting up.
-;; The first desktop file it finds is then used on startup.
-;; ----------------------------------------------------------------------
-
 
 ;; Always load the following libs
 ;; Think about needing to have all these 3rd party saved in my home dir...
@@ -86,11 +52,14 @@
 (if (locate-library "mm-json-format-region") 
     (load-library "mm-json-format-region"))
 
+;; Need js2 library before we install faces since we customize one of them
+(if (locate-library "js2-mode")
+    (load-library "js2-mode"))
+
 ;; Special library just for my faces, colors, fonts
 (if (locate-library "mm-faces") 
     (load-library "mm-faces"))
 
-;; 
 (if (locate-library "python-mode") 
     (load-library "python-mode"))
 
@@ -99,11 +68,6 @@
 ;(if (locate-library "json-mode") 
 ;    (load-library "json-mode"))
 
-;; Perforce interface
-;(if (locate-library "p4-8_5") 
-;    (progn
-;      (setq p4-default-diff-options "-d")
-;      (load-library "p4-8_5")))
 
 ; Generic stuff
 (line-number-mode 1)
@@ -117,6 +81,7 @@
 (global-set-key "\M-n"	    'scroll-line-up)
 (global-set-key "\M-p"	    'scroll-line-down)
 
+; Interfere with OSX Mission Control/Spaces...
 ;(global-set-key [f8] 'start-kbd-macro)
 ;(global-set-key [f9] 'end-kbd-macro)
 ;(global-set-key [f10] 'call-last-kbd-macro)
@@ -181,7 +146,7 @@
 (defun myke-common-hook ()
   ;; use bsd style for all C like languages
 ;  (c-set-style "bsd")
-; Defined in mm-code-helpers for odd tabs+spaces indentation style.
+  ;; Defined in mm-code-helpers for odd tabs+spaces indentation style.
   (c-set-style "mm-tabs-and-spaces")
   (setq tab-width 4)
   ;; This makes tab only indent when at begin of non-whitespace.
@@ -199,8 +164,7 @@
   )
 
 (defun myke-c-mode-hook ()
-;; C work (typically kernel code) requires using tabs and special
-;;  indentations. *sigh*
+;; C work (typically kernel code) requires using tabs and special indentations.
   (c-set-offset 'arglist-cont-nonempty '*)
   (c-set-offset 'arglist-cont '*)
   (c-set-offset 'statement-cont '*)
@@ -240,12 +204,26 @@
 	indent-tabs-mode nil)
   )
 
+;; Generic JavaScript settings
 (defun myke-js-mode-hook ()
   (font-lock-mode 1)
   (setq indent-tabs-mode nil)
   (setq tab-width 2)
   (define-key js-mode-map "\C-c\C-c" 'comment-region)
   (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
+  ;; Tried this once globally, didn't work for C++. Let's see if it works better with specific types
+  ;; Still has a little trouble with exiting JS functions in functions.
+  ;; It thinks it's always in the previously defined functions. (it's just looking backwards for def)
+  ;; Once inner function closes, does not revert to the enclosing function.
+  (which-function-mode)
+  )
+
+;; JS2 mode specific things only. Having trouble setting this
+;; elsewhere in generic places because it requires the js2-mode lib to
+;; be loaded. Even putting the first face setting call after loading
+;; the lib it's not working. Maybe I'm crazy?
+(defun myke-js2-mode-hook ()
+  (set-face-foreground  'js2-function-param "SeaGreen3")
   )
 
 ; Since coding standards could be different, use two different styles
@@ -257,6 +235,7 @@
 (add-hook 'sgml-mode-hook 'myke-xml-mode-hook)
 (add-hook 'js-mode-hook 'myke-js-mode-hook)
 (add-hook 'js2-mode-hook 'myke-js-mode-hook)
+(add-hook 'js2-mode-hook 'myke-js2-mode-hook)
 
 ;; elisp mode customizations and bindings
 (defun myke-elisp-hook ()
@@ -266,45 +245,40 @@
   (define-key emacs-lisp-mode-map "\C-c\C-c" 'comment-region)
   (define-key emacs-lisp-mode-map "\C-\M-y" 'mm-yank-and-indent)
   (font-lock-mode 1)
+  (which-function-mode)
 )
 (add-hook 'emacs-lisp-mode-hook 'myke-elisp-hook)
 
-; Other way to do it:
+;; Other way to do it:
 (add-hook 'lisp-mode-hook '(lambda () 
-			     (font-lock-mode 1)
-			     (setq indent-tabs-mode nil)))
+                             (font-lock-mode 1)
+                             (setq indent-tabs-mode nil)))
 (add-hook 'html-mode-hook '(lambda () 
-			     (font-lock-mode 1)
+                             (font-lock-mode 1)
                              (setq tab-width 4)))
 (add-hook 'sgml-mode-hook '(lambda () 
-			     (font-lock-mode 1)
+                             (font-lock-mode 1)
                              (setq tab-width 4)))
 (add-hook 'java-mode-hook '(lambda () 
-			     (font-lock-mode 1)
-			     (setq indent-tabs-mode nil)))
+                             (font-lock-mode 1)
+                             (setq indent-tabs-mode nil)))
 
-; No auto-fill for twiki pages.
+;; No auto-fill for twiki pages.
 (defun twiki-mode ()
   (auto-fill-mode 0))
 
 (defun myke-python-mode-hook ()
   (setq indent-tabs-mode nil)
+  (font-lock-mode 1)
+  (setq tab-width 4)
+  (setq python-indent-offset 4)
   )
 
-(add-hook 'python-mode-hook '(lambda () 
-			     (font-lock-mode 1)
-                             (setq tab-width 4)))
-
-;(add-hook 'text-mode-hook '(lambda () (line-number-mode 1)))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq default-major-mode 'text-mode)
 (global-set-key [f9]        'other-window)
 (global-set-key [f10]       'other-frame)
-
-;; Turn on function display mode.
-;; Doesn't seem to work too well...
-;(which-function-mode)
 
 ;; Autorevert package: Loads files that have been changed on disk.
 (if (locate-library "autorevert") 
@@ -335,7 +309,8 @@
 (setq require-final-newline t)
 
 ;; ----------------------------------------------------------------------
-; igrep package
+;; igrep package
+;; 2016-02-22 Check these. Almost never use them.
 ;; ----------------------------------------------------------------------
 
 (autoload 'igrep "igrep"
@@ -390,3 +365,34 @@
     (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
     (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode)) ; GitHub markdown
   )
+
+
+;; ----------------------------------------------------------------------
+;; Desktop package for restoring buffers on startup.
+;; For now, needs to be activated manually to save, and
+;; to restore need to load desktop file and execute buffer.
+;;
+;; Do this last, since we want everything else loaded before files begin
+;; being loaded to get correct modes and whatnot.
+; See:
+; http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
+;
+; Be careful about turning it on universally because then every time
+; EDITOR is invoked (i.e. on commits), it will load everything.
+(if (locate-library "desktop")
+    (load-library "desktop"))
+(when (>= emacs-major-version 24)
+  (desktop-save-mode 1) ; auto-saves on exit, auto-loads on start
+  )
+
+;; Below all from Manual Sec. 43 "Saving Emacs Sessions" emacs v24.4.1
+;;
+;; desktop-revert     - goes back to a previous desktop.
+;; desktop-clear      - removes "all" buffers from desktop.
+;; desktop-change-dir - can be used to move to another desktop by dir.
+;; Basically loads the .emacs.desktop from given dir.
+;; Would be nice to be able to launch emacs from known dir.
+;; But on a non-command line this is tricky?
+;; DESKTOP-PATH specifies the directories to search when starting up.
+;; The first desktop file it finds is then used on startup.
+;; ----------------------------------------------------------------------

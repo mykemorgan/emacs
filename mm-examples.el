@@ -1,8 +1,6 @@
 ;; -*- emacs-lisp -*-
 ;;
-;; 
-;;
-; elisp file for playing around and learning/debugging.
+;; elisp file for playing around and learning/debugging.
 ;;
 ;; Some random commands or packages to look up/explore later:
 ;;
@@ -16,6 +14,11 @@
 ;; One built-in package manager:
 ;; M-x list packages
 ;; Not sure where the packages get installed?
+;;
+;; Conditionals help:
+;; (if condition then-form else-forms)
+;; then-form has to be (progn a b c) to do multiple things. Else can be multiple
+;; (when condition a b c) is like (if condition (progn a b c) nil)
 
 (defun mm-test ()
   "
