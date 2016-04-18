@@ -198,7 +198,7 @@
   (setq tab-width 4)
   ;; This makes tab indent the line even mid-line.
   (setq c-tab-always-indent t)
-
+  (define-key xml-mode-map "\C-\M-y" 'mm-yank-and-indent)
   (setq c-basic-offset tab-width
 	;; Make sure tabs are used instead of spaces (nil to force no tabs)
 	indent-tabs-mode nil)
@@ -255,13 +255,15 @@
                              (setq indent-tabs-mode nil)))
 (add-hook 'html-mode-hook '(lambda () 
                              (font-lock-mode 1)
-                             (setq tab-width 4)))
+                             (setq tab-width 4)
+                             (define-key html-mode-map "\C-\M-y" 'mm-yank-and-indent)))
 (add-hook 'sgml-mode-hook '(lambda () 
                              (font-lock-mode 1)
                              (setq tab-width 4)))
 (add-hook 'java-mode-hook '(lambda () 
                              (font-lock-mode 1)
-                             (setq indent-tabs-mode nil)))
+                             (setq indent-tabs-mode nil)
+                             (define-key java-mode-map "\C-\M-y" 'mm-yank-and-indent)))
 
 ;; No auto-fill for twiki pages.
 (defun twiki-mode ()
@@ -272,6 +274,8 @@
   (font-lock-mode 1)
   (setq tab-width 4)
   (setq python-indent-offset 4)
+  (define-key python-mode-map "\C-\M-y" 'mm-yank-and-indent)
+  (define-key python-mode-map "\C-c\C-c" 'comment-region)
   )
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
