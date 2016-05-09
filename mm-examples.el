@@ -83,3 +83,30 @@ Common root directories will be:
   (message "Begin: %d End: %d Input: %s" begin end file)
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Packages stuff from mpavlinksky
+;; https://github.com/mpavlinsky/emacsconfig
+;;
+
+;; (require 'package)
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;; ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+;; (package-initialize)
+
+;; (setq prelude-packages
+;;   '(smex projectile helm helm-projectile ibuffer-vc ag key-chord company omnisharp flycheck go-mode company-go))
+
+;; (defun prelude-packages-installed-p ()
+;;   (loop for p in prelude-packages
+;;         when (not (package-installed-p p)) do (return nil)
+;;         finally (return t)))
+
+;; (unless (prelude-packages-installed-p)
+;;   ;; check for new packages (package versions)
+;;   (message "%s" "Emacs Prelude is now refreshing its package database...")
+;;   (package-refresh-contents)
+;;   (message "%s" " done.")
+;;   ;; install the missing packages
+;;   (dolist (p prelude-packages)
+;;     (when (not (package-installed-p p))
+;;       (package-install p))))
