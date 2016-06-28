@@ -52,14 +52,15 @@ https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&undefined_quantity=1&b
 
 ** TODO **
 
-- Fix problem with cursor starting within the \"<form\" string
-  going past it to the previous \"<form\"
+- Need to make sure we're within a <form> not just search backwards.
 - Use replace-match with 3rd argument nil to allow for regex
   replacement strings and make code cleaner?
 - URL escape the found param values? Since they could be quoted?
 "
   (interactive)
   (save-excursion
+    ;; Hack: move over beginning "<form" text so we get the one "we're in"
+    (goto-char (+ (point) 5))
     (search-backward "<form")
     (setq form-beg (point))
     (search-forward "</form>")
