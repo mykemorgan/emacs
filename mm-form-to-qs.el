@@ -25,14 +25,13 @@
 
 
 (defun mm-form-to-qs ()
-  "
-Transform a chunk of html <form> code doing a POST into a GET
+  "Transform a chunk of html <form> code doing a POST into a GET
 URL with querystring parameters.
 
-Only transforms the given region.
+Starts at the current point and searches backwards to find the
+\"<form\" tag to begin to transform.
 
-For example, if selecting the whole form region,
-will change this form POST:
+For example, will change this form POST:
 
 <form class=\"wps\" method=post action=\"https://www.sandbox.paypal.com/cgi-bin/webscr\">
   <input type=hidden name=cmd value=_xclick>
@@ -51,47 +50,47 @@ Into this URL to GET:
 
 https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&undefined_quantity=1&business=n8@x.com&amount=10.00&item_name=Myke-WPS-Test&quantity=1&os0=large&option_select0=large&option_amount0=18.00
 
-TODO
+** TODO **
 
-Start at the point, go backward to the <form> beginning, and grab
-the region outselves. That way user just has to have cursor in
-the <form>...
-
-Or just go back to <form> and move forward until find the
-</form>, since as we replace text, the area where we need to look
-shrinks, and thus might accidentally grab another form right after
-the current one.
+- Fix problem with cursor starting within the \"<form\" string
+  going past it to the previous \"<form\"
+- Use replace-match with 3rd argument nil to allow for regex
+  replacement strings and make code cleaner?
+- URL escape the found param values? Since they could be quoted?
 "
   (interactive)
   (save-excursion
-    (let ((form-beg (if (< (point) (mark)) (point) (mark)))
-          (form-end (if (> (point) (mark)) (point) (mark))))
+    (search-backward "<form")
+    (setq form-beg (point))
+    (search-forward "</form>")
+    (setq form-end (point))
 
-      ;; Docs say manner of search/replace is better in Lisp programs
-      ;; than using replace-string.
-      
-      ;; Things to add a newline after
-      (goto-char form-beg)
-      (search-forward-regexp "<form .* action=\"" form-end t)
+    (goto-char form-beg)
+                                        ; First find the action for the URL
+    (search-forward-regexp "<form .* action=\"" form-end t)
+    (replace-match "" nil t)
+    (search-forward-regexp "\">\n" form-end t)
+    (replace-match "?" nil t)
+                                        ; Find all the querystring params
+    (while (search-forward-regexp " *<input *type=hidden.*name=" form-end t)
       (replace-match "" nil t)
-      (search-forward-regexp "\">\n" form-end t)
-      (replace-match "?" nil t)
-                                        ;      (setq form-end (+ form-end 1))
-      (while (search-forward-regexp " *<input *type=hidden.*name=" form-end t)
-        (replace-match "" nil t)
-        (search-forward-regexp " value=\"*" form-end t)
-        (replace-match "=" nil t)
-        (search-forward-regexp "\"*>\n" form-end t)
-        (replace-match "&" nil t)
-        )
-
-      (search-backward "&" form-beg t)
-      (replace-match "" nil t)
-
-      (search-forward-regexp " *<input type=submit.*>" form-end t)
-      (replace-match "" nil t)
-      (search-forward-regexp " *</form>" form-end t)
-      (replace-match "" nil t)
+      (search-forward-regexp " value=\"*" form-end t)
+      (replace-match "=" nil t)
+      (search-forward-regexp "\"*>\n" form-end t)
+      (replace-match "&" nil t)
+                                        ; reset region boundary since we removed stuff
+      (setq here (point))
+      (search-forward "</form>")
+      (setq form-end (point))
+      (goto-char here)
       )
+
+    (search-backward "&" form-beg t)
+    (replace-match "" nil t)
+
+    (search-forward-regexp " *<input type=submit.*>" form-end t)
+    (replace-match "" nil t)
+    (search-forward-regexp " *</form>" form-end t)
+    (replace-match "" nil t)
     )
   )
