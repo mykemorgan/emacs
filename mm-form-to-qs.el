@@ -67,19 +67,19 @@ https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&undefined_quantity=1&b
     (setq form-end (point))
 
     (goto-char form-beg)
-                                        ; First find the action for the URL
+    ;; First find the action for the URL
     (search-forward-regexp "<form .* action=\"" form-end t)
     (replace-match "" nil t)
     (search-forward-regexp "\">\n" form-end t)
     (replace-match "?" nil t)
-                                        ; Find all the querystring params
+    ;; Find all the querystring params
     (while (search-forward-regexp " *<input *type=hidden.*name=" form-end t)
       (replace-match "" nil t)
       (search-forward-regexp " value=\"*" form-end t)
       (replace-match "=" nil t)
       (search-forward-regexp "\"*>\n" form-end t)
       (replace-match "&" nil t)
-                                        ; reset region boundary since we removed stuff
+      ;; reset region boundary since we removed stuff
       (setq here (point))
       (search-forward "</form>")
       (setq form-end (point))

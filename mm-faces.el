@@ -84,6 +84,24 @@
       )
   )
 
+; Set a dark background
+(defun mm-set-dark-background ()
+  "Set the winow to a dark background color."
+  (interactive)
+  (set-foreground-color "white")
+  (set-background-color "gray40")
+  (mm-face-dark-background)
+  )
+
+; Set a light background
+(defun mm-set-light-background ()
+  "Set the windo to a light background color."
+  (interactive)
+  (set-foreground-color "black")
+  (set-background-color "cornsilk")
+  (mm-face-light-background)
+  )
+
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
  '(default ((t (:family "Hack" :height 140))))
