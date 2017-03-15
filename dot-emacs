@@ -142,6 +142,13 @@
                                 ("\\.a$" . c-mode))))
 
 
+;; Found: web-mode for JSX files.
+;; See: http://web-mode.org/ also has some documentation
+(if (locate-library "web-mode")
+    (load-library "web-mode"))
+(add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+
+
 ;; Add my indentation style preferences and frame decorations.
 (defun myke-common-hook ()
   ;; use bsd style for all C like languages
@@ -209,7 +216,7 @@
   (font-lock-mode 1)
   (setq indent-tabs-mode nil)
   (setq tab-width 2)
-  (define-key js-mode-map "\C-c\C-c" 'comment-region)
+  (define-key js-mode-map "\C-c\C-c" 'comment-region) ;; Haha - use M-; !
   (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
   ;; Tried this once globally, didn't work for C++. Let's see if it works better with specific types
   ;; Still has a little trouble with exiting JS functions in functions.
@@ -242,7 +249,7 @@
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
   (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent)
-  (define-key emacs-lisp-mode-map "\C-c\C-c" 'comment-region)
+  (define-key emacs-lisp-mode-map "\C-c\C-c" 'comment-region) ;; Haha - use M-; !
   (define-key emacs-lisp-mode-map "\C-\M-y" 'mm-yank-and-indent)
   (font-lock-mode 1)
   (which-function-mode)
@@ -277,7 +284,7 @@
   (setq tab-width 4)
   (setq python-indent-offset 4)
   (define-key python-mode-map "\C-\M-y" 'mm-yank-and-indent)
-  (define-key python-mode-map "\C-c\C-c" 'comment-region)
+  (define-key python-mode-map "\C-c\C-c" 'comment-region) ;; Haha - use M-; !
   )
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
