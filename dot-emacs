@@ -142,13 +142,6 @@
                                 ("\\.a$" . c-mode))))
 
 
-;; Found: web-mode for JSX files.
-;; See: http://web-mode.org/ also has some documentation
-(if (locate-library "web-mode")
-    (load-library "web-mode"))
-(add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
-
-
 ;; Add my indentation style preferences and frame decorations.
 (defun myke-common-hook ()
   ;; use bsd style for all C like languages
@@ -372,6 +365,18 @@
 (when (>= emacs-major-version 24)
     (if (locate-library "markdown-mode")
         (load-library "markdown-mode"))
+
+    ;; From: http://web-mode.org/ - For JSX and other template mixed-mode files
+    ;; This is flakey for older emacsen? Like 22.1.1 I have on the console?
+    (if (locate-library "web-mode")
+        (load-library "web-mode"))
+
+    (add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+    (add-hook 'web-mode-hook '(lambda ()
+                                (font-lock-mode 1)
+                                (setq tab-width 4)
+                                (setq indent-tabs-mode nil)))
+
     (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 
     (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
