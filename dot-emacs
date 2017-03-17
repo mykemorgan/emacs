@@ -371,7 +371,7 @@
     (if (locate-library "web-mode")
         (load-library "web-mode"))
 
-    (add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
     (add-hook 'web-mode-hook '(lambda ()
                                 (font-lock-mode 1)
                                 (setq tab-width 4)
