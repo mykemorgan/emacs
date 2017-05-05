@@ -1,6 +1,7 @@
 ### Packages to Download
 
-Elisp packages I might reference/load in my setup:
+Elisp packages I reference/load in my setup, which for now are sadly
+expected to be here in this emacs directory.
 
 * RFC-find.el
 * autorevert.el
