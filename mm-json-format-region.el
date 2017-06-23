@@ -1,6 +1,8 @@
 ;; -*- emacs-lisp -*-
 ;;
 
+;; XXX Or, you know, RTFM and use json-pretty-print in the json package :)
+;;
 ;;-------------------------------------------------------------------------------
 ;; JSON region formatter function:
 ;; In region, replace:
@@ -20,6 +22,10 @@
 
 (defun mm-json-format-region ()
   "
+**********************************************************************
+* NOTE: json-pretty-print is probably what you really want to use.
+**********************************************************************
+
 Perform a simple format and indent on the current region,
 based on JSON rules.
 
