@@ -25,12 +25,7 @@
 (cond ((string-match "XEmacs\\|Lucid" emacs-version)
        ;; Load gnuserv to let outside programs connect to xemacs.
        (gnuserv-start)
-
-       ;; Startup files for XEmacs 19.xx
-;;       (load-library "xemacs-general")
-;;       (load-library "xemacs-keys")
-       (load-library "xemacs-packages")
-       (message "Startup files loaded succesfully.")))
+       (message "Looks like you went back to XEmacs. DID NOT LOAD old startup files. Better check that.")))
 
 ;; Always load the following libs
 ;; Think about needing to have all these 3rd party saved in my home dir...
@@ -39,9 +34,7 @@
 (if (locate-library "RFC-find") 
     (load-library "RFC-find"))
 
-;; mimimap sidebar (In ~/.emacs.d on the laptop)
-(if (locate-library "~/.emacs.d/elpa/minimap-1.2/minimap")
-    (load-library "~/.emacs.d/elpa/minimap-1.2/minimap"))
+;; mimimap package should be built in now?
 
 ;; mm-code-helpers contains most of the 'mm-XXX' elisp functions.
 (if (locate-library "mm-code-helpers") 
@@ -65,9 +58,9 @@
 
 ;;----------------------------------------------------------------------
 ;; Ugh: json-mode requires:
-;; - 'js' (js-mode)
+;; - 'js' (for js-mode)
 ;; - 'ex'
-;; -'json-reformat'
+;; - 'json-reformat'
 ;; Missing the last.
 ;; js-mode comes with emacs 23.2 - need to update shell version?
 ;(if (locate-library "json-mode") 
@@ -86,31 +79,19 @@
 (global-set-key "\M-n"	    'scroll-line-up)
 (global-set-key "\M-p"	    'scroll-line-down)
 
-; Interfere with OSX Mission Control/Spaces...
-;(global-set-key [f8] 'start-kbd-macro)
-;(global-set-key [f9] 'end-kbd-macro)
-;(global-set-key [f10] 'call-last-kbd-macro)
-;(global-set-key [f11] 'compile)
-
-(global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
-(global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
-
-;; Options Menu Settings
-;; Needs to be before customizations, since for some reason it messes up
-;; my tab width settings.
-;; Also contains italic font specifier.
-;; =====================
-(cond
- ((and (string-match "XEmacs" emacs-version)
-       (boundp 'emacs-major-version)
-       (or (and
-            (= emacs-major-version 19)
-            (>= emacs-minor-version 14))
-           (= emacs-major-version 20))
-       (fboundp 'load-options-file))
-  (load-options-file "/x/home/mimorgan/.xemacs-options")))
-;; ============================
-;; End of Options Menu Settings
+;; Global key bindings from random times in the past.
+;; Should wrap these in some sort of 'if not OSX' since these
+;; Interfere with OSX Mission Control/Spaces, and might not work with the new touchbar either?
+;
+;; (global-set-key [f8]  'start-kbd-macro)
+;; (global-set-key [f9]  'end-kbd-macro)
+;; (global-set-key [f10] 'call-last-kbd-macro)
+;; (global-set-key [f11] 'compile)
+;
+;; (global-set-key [f9]  'other-window)
+;; (global-set-key [f10] 'other-frame)
+;; (global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
+;; (global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
 
 ;; Set up file type recognition
 (setq auto-mode-alist (mapcar 'purecopy
@@ -288,8 +269,6 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq default-major-mode 'text-mode)
-(global-set-key [f9]        'other-window)
-(global-set-key [f10]       'other-frame)
 
 ;; Autorevert package: Loads files that have been changed on disk.
 (if (locate-library "autorevert") 
@@ -310,7 +289,6 @@
  '(toolbar-mail-reader (quote not-configured))
 ; '(compile-command "gmake -k ")
  '(compile-command "mm make ")
- '(user-mail-address "mimorgan@paypal.com" t)
  '(query-user-mail-address nil))
 
 ; Turn on the mouse wheel
