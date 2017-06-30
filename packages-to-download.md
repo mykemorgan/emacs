@@ -1,7 +1,7 @@
 ### Packages to Download
 
 Elisp packages I reference/load in my setup, which for now are sadly
-expected to be here in this emacs directory.
+expected to be here in the `emacs/packages` directory.
 
 * RFC-find.el
 * autorevert.el

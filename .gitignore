@@ -10,10 +10,5 @@
 # Don't look at auto-downloaded randomness
 emacs-extras
 
-# Files that might be sitting here downloaded but to not commit
-RFC-find.el
-autorevert.el
-igrep.el
-json-mode.el
-markdown-mode.el
-web-mode.el
+# Don't look at downloaded pacakges
+packages
