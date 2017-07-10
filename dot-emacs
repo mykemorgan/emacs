@@ -56,6 +56,10 @@
 (if (locate-library "python-mode") 
     (load-library "python-mode"))
 
+;; Enable when we finish arguing about what settings to use...
+;; (if (locate-library "prettier-js")
+;;     (load-library "prettier-js"))
+
 ;;----------------------------------------------------------------------
 ;; Ugh: json-mode requires:
 ;; - 'js' (for js-mode)
