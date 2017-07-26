@@ -179,6 +179,51 @@ after the file has been loaded"
         c-basic-offset tab-width)
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Adds an open-closed pair of symbols, such as '()',
+;; when you hit the '(' key.
+;;
+;; This is just playing around with elisp.
+;; There are existing packages for this like:
+;; - smartparans
+;;
+;; Commented-out option to just add a single '(' sometimes, like as
+;; long as you're not in the middle of text.
+(defun mm-insert-balanced (openchar)
+  "Insert a pair of parenthesis if you hit '('.
+There is a commented-out option to check that you are not mid-text.
+(That is, if next char is space or newline, or end of buffer.)
+
+To undo a key set, use something like this:
+(global-set-key \"z\" (lambda () (interactive) (insert \"z\")))
+
+Currently recognizes these pairs:
+()
+[]
+{}
+<>"
+  (interactive)
+  (let ((c (char-after (point)))
+        (closed (cond ((= openchar ?\() "()")
+                      ((= openchar ?\[) "[]")
+                      ((= openchar ?\<) "<>")
+                      ((= openchar ?\{) "{}")
+                      ;; Oops, we don't have a closing match for your character.
+                      ;; Add new pairs here if you want your own.
+                      ))
+        )
+    (cond
+     ((and (not (eq closed nil))
+;           (or (not c) (= c 32) (= c 10)) ; Uncomment this if you want the "don't do this mid-text"
+           ) (let () (insert closed) (backward-char 1)))
+     (t (insert openchar)))))
+
+;; What if we set to something that doesn't have a open/close pair?
+;(global-set-key "z" (lambda () (interactive) (mm-insert-balanced ?\z)))
+;; Fix problems with setting a key like this:
+;(global-set-key "z" (lambda () (interactive) (insert "z")))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; From mgainer, fixed by myke for some special cases.
 ; Commented out code gives some funky results for

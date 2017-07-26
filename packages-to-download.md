@@ -11,3 +11,4 @@ expected to be here in the `emacs/packages` directory.
 * [web-mode.el](http://web-mode.org)
 * [prettier-js.el](https://github.com/prettier/prettier-emacs)
   * Above is a mode to use with the [Prettier code formatter](https://github.com/prettier/prettier)
+* [smartparens](https://github.com/Fuco1/smartparens)

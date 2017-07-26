@@ -201,6 +201,13 @@
   (setq tab-width 2)
   (define-key js-mode-map "\C-c\C-c" 'comment-region) ;; Haha - use M-; !
   (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
+
+  ;; Try a simple auto-balancing of bracket-type things
+  (define-key "(" (lambda () (interactive) (mm-insert-balanced ?\()))
+  (define-key "[" (lambda () (interactive) (mm-insert-balanced ?\[)))
+  (define-key "<" (lambda () (interactive) (mm-insert-balanced ?\<)))
+  (define-key "{" (lambda () (interactive) (mm-insert-balanced ?\{)))
+
   ;; Tried this once globally, didn't work for C++. Let's see if it works better with specific types
   ;; Still has a little trouble with exiting JS functions in functions.
   ;; It thinks it's always in the previously defined functions. (it's just looking backwards for def)
