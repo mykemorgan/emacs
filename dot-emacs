@@ -188,7 +188,7 @@
   (setq tab-width 4)
   ;; This makes tab indent the line even mid-line.
   (setq c-tab-always-indent t)
-  (define-key xml-mode-map "\C-\M-y" 'mm-yank-and-indent)
+  (define-key sgml-mode-map "\C-\M-y" 'mm-yank-and-indent)
   (setq c-basic-offset tab-width
 	;; Make sure tabs are used instead of spaces (nil to force no tabs)
 	indent-tabs-mode nil)
@@ -203,10 +203,10 @@
   (define-key js-mode-map "\C-\M-y" 'mm-yank-and-indent)
 
   ;; Try a simple auto-balancing of bracket-type things
-  (define-key "(" (lambda () (interactive) (mm-insert-balanced ?\()))
-  (define-key "[" (lambda () (interactive) (mm-insert-balanced ?\[)))
-  (define-key "<" (lambda () (interactive) (mm-insert-balanced ?\<)))
-  (define-key "{" (lambda () (interactive) (mm-insert-balanced ?\{)))
+  (define-key js-mode-map "(" (lambda () (interactive) (mm-insert-balanced ?\()))
+  (define-key js-mode-map "[" (lambda () (interactive) (mm-insert-balanced ?\[)))
+  (define-key js-mode-map "<" (lambda () (interactive) (mm-insert-balanced ?\<)))
+  (define-key js-mode-map "{" (lambda () (interactive) (mm-insert-balanced ?\{)))
 
   ;; Tried this once globally, didn't work for C++. Let's see if it works better with specific types
   ;; Still has a little trouble with exiting JS functions in functions.
