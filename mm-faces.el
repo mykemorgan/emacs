@@ -34,6 +34,24 @@
   ;; the 'next' isearch item
   (set-face-background  'lazy-highlight               "palevioletred4")
   ;;  (set-face-foreground  'lazy-highlight               "black")
+
+  ;; -------------------------------------------------------------------------
+  ;; Override Faces needing changing on gnu/linux to "simple terminal colors":
+  ;; Remember to do this last, haha.
+  (when (eq system-type 'gnu/linux)
+    (set-face-foreground  'font-lock-function-name-face "blue")
+    (set-face-foreground  'font-lock-variable-name-face "blue")
+    (set-face-foreground  'font-lock-type-face          "blue")
+    (set-face-foreground  'font-lock-string-face        "green")
+    (set-face-background  'isearch                      "magenta")
+    (set-face-foreground  'isearch                      "black")
+    (set-face-background  'lazy-highlight               "cyan")
+    (set-face-background  'region                       "cyan")
+    (when (>= emacs-major-version 23)
+      (set-face-background  'show-paren-match "magenta")
+      (set-face-foreground  'show-paren-match "black")
+      )
+    )
   )
 
 ; Faces for dark backgrounds.
@@ -56,18 +74,28 @@
   (set-cursor-color "yellow")
 
   ;; Some dynamically displayed faces
-  ; the 'current' isearch item
+  ;; the 'current' isearch item
   (set-face-background  'isearch                      "palevioletred2")
   (set-face-foreground  'isearch                      "black")
   ;; the 'next' isearch item
   (set-face-background  'lazy-highlight               "gray65")
-;;  (set-face-foreground  'lazy-highlight               "black")
+
+  ;; -------------------------------------------------------------------------
+  ;; Override Faces needing changing on gnu/linux to "simple terminal colors":
+  ;; Maybe all that needs to be done is make the terminal 'xterm' type?
+  ;; Remember to do this last, haha.
+  (when (eq system-type 'gnu/linux)
+    (set-face-foreground  'font-lock-string-face        "green")
+    (set-face-background  'isearch                      "yellow")
+    (set-face-background  'lazy-highlight               "white")
+    (set-face-background  'region                       "cyan")
+    (when (>= emacs-major-version 23)
+      (set-face-background  'show-paren-match "yellow")
+      (set-face-foreground  'show-paren-match "black")
+      )
+    )
   )
 
-; Variables and their types
-
-;; Face to use for strings and documentation strings
-(set-face-foreground  'font-lock-string-face        "green4")
 
 ; There are many new faces in emacs version 22.1 and later.
 (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
@@ -128,10 +156,10 @@
   ;; Is there a way to query the terminal background color?
   (mm-face-dark-background)
   ;; Oddly enough, on linux/21.4.1 the mode face fore/background are reversed???
-  (set-face-background  'mode-line "white")
+  (set-face-background  'mode-line "yellow")
   (if (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
-      (set-face-background  'mode-line-inactive "gray60")
+      (set-face-background  'mode-line-inactive "white")
     )
   (set-face-foreground  'mode-line "blue")
   )
