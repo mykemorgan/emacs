@@ -360,7 +360,9 @@
 ; EDITOR is invoked (i.e. on commits), it will load everything.
 (if (locate-library "desktop")
     (load-library "desktop"))
-(when (>= emacs-major-version 24)
+
+;; I dunno, works in v22 now?
+(when (>= emacs-major-version 22)
   (desktop-save-mode 1) ; auto-saves on exit, auto-loads on start
   )
 
