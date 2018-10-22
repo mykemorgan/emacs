@@ -39,9 +39,12 @@
 ;; mm-code-helpers contains most of the 'mm-XXX' elisp functions.
 (if (locate-library "mm-code-helpers") 
     (load-library "mm-code-helpers"))
+
 ;; Then I was smart and put one "package" per file.
-(if (locate-library "mm-find-header-at-point") 
-    (load-library "mm-find-header-at-point"))
+;; No need to fix and use this yet.
+;; (if (locate-library "mm-find-header-at-point")
+;;    (load-library "mm-find-header-at-point"))
+
 (if (locate-library "mm-json-format-region") 
     (load-library "mm-json-format-region"))
 
@@ -136,9 +139,9 @@
 (defun myke-common-hook ()
   ;; use bsd style for all C like languages
 ;  (c-set-style "bsd")
-  ;; Defined in mm-code-helpers for odd tabs+spaces indentation style.
-  (c-set-style "mm-tabs-and-spaces")
-  (setq tab-width 4)
+  ;; See: mm-code-helpers for old tabs+spaces indentation style.
+;  (c-set-style "mm-tabs-and-spaces")
+;  (setq tab-width 4)
   ;; This makes tab only indent when at begin of non-whitespace.
   ;; Useful for aligning parameters.
   (setq c-tab-always-indent nil)

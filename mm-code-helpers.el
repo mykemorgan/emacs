@@ -297,6 +297,8 @@ Currently recognizes these pairs:
 ; Create a hybrid indentation style:
 ; Tabs into the normal indentation level, then space into function
 ; argument or logical continuation lines.
-(c-add-style "mm-tabs-and-spaces" '("k&r" (c-basic-offset . 2) (c-special-indent-hook . tabs-and-spaces-indent)))
+;;
+;; Don't use this any more!
+;;(c-add-style "mm-tabs-and-spaces" '("k&r" (c-basic-offset . 2) (c-special-indent-hook . tabs-and-spaces-indent)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
