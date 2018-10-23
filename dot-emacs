@@ -364,9 +364,12 @@
 (if (locate-library "desktop")
     (load-library "desktop"))
 
-;; I dunno, works in v22 now?
-(when (>= emacs-major-version 22)
-  (desktop-save-mode 1) ; auto-saves on exit, auto-loads on start
+;; Works in at least as low as v22, but maybe don't want to
+;; auto-save the desktop every time we launch for a commit message?
+;; Quick solve: launching with "% emacs --no-desktop" doesn't load desktop.
+;; Unfortunately it still seems to save it? So have to gate it here.
+(when (>= emacs-major-version 26)
+  (desktop-save-mode 1) ; Desktop auto-save on exit, auto-load on start
   )
 
 ;; Below all from Manual Sec. 43 "Saving Emacs Sessions" emacs v24.4.1
