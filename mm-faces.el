@@ -117,7 +117,8 @@
   "Set the winow to a dark background color."
   (interactive)
   (set-foreground-color "white")
-  (set-background-color "gray40")
+;  (set-background-color "gray40")
+  (set-background-color "#224466")
   (mm-face-dark-background)
   )
 
@@ -132,7 +133,7 @@
 
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
- '(default ((t (:family "Hack" :height 140))))
+ '(default ((t (:family "Hack" :height 120))))
  '(markdown-header-face ((t (:family "Hack" :bold t :foreground "yellow"))))
  '(markdown-header-delimiter-face ((t (:inherit markdown-header-face))))
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :weight normal))))
@@ -149,7 +150,8 @@
  )
 
 ;; Mac specific settings
-(if (eq system-type 'darwin)
+(if (or (eq system-type 'darwin)
+        (eq system-type 'gnu/linux))
     ;; mac specific settings. really, window-ized emacs settings
     (mm-face-dark-background)
   ;; else probably in a terminal... Assume dark?
@@ -163,4 +165,3 @@
     )
   (set-face-foreground  'mode-line "blue")
   )
-
