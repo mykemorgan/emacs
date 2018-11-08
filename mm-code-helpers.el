@@ -33,32 +33,13 @@
   "Add a new indented function with proper err variable and bail tag set up."
   (interactive)
   (let ((beg (point)))
-    (insert "{\n\tint err = 0;\n\n\tbail_false(false); /* XXX/mm need to finish */\n\nbail:\n\treturn (err);\n}\n")
+    (insert "{\n  int err = 0;\n\n  assert(false); /* XXX/mm need to finish */\n\n  return (err);\n}\n")
     (indent-region beg (point) nil))
   (previous-line 4)
   (indent-according-to-mode)
   (end-of-line))
 
 ;(global-set-key [f3] 'mm-add-new-c-function)
-
-;; Add a new flow state
-(defun mm-add-new-flow-state ()
-  "Add a new flow state template for an fxml file."
-  (interactive)
-  (let ((beg (point)))
-    (insert "\t<State>\n")
-    (insert "\t\t<Id></Id>\n")
-    (insert "\t\t<Path></Path>\n")
-    (insert "\t\t<Transition>\n")
-    (insert "\t\t\t<Id></Id>\n")
-    (insert "\t\t\t<NextState></NextState>\n")
-    (insert "\t\t</Transition>\n")
-    (insert "\t</State>\n"))
-  (previous-line 7)
-  (end-of-line)
-  (backward-char 5))
-
-;(global-set-key [f3] 'mm-add-new-flow-state)
 
 ;; Add a new c++ class, complete with ccdoc header to fill in.
 ;; XXX/mm It would be really nice to add the class name too!

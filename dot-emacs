@@ -156,12 +156,12 @@
   (font-lock-mode 1)
   )
 
-(defun myke-c-mode-hook ()
-;; C work (typically kernel code) requires using tabs and special indentations.
-  (c-set-offset 'arglist-cont-nonempty '*)
-  (c-set-offset 'arglist-cont '*)
-  (c-set-offset 'statement-cont '*)
-  )
+ (defun myke-c-mode-hook ()
+;; ;; C work (typically kernel code) requires using tabs and special indentations.
+;;   (c-set-offset 'arglist-cont-nonempty '*)
+;;   (c-set-offset 'arglist-cont '*)
+;;   (c-set-offset 'statement-cont '*)
+   )
 
 (defun myke-c++-mode-hook ()
   ;; other customizations can go here
@@ -171,9 +171,9 @@
   ;; in a "using tabs not spaces" environment.  Logic being, indent
   ;; always is a tab-multiple, and so there should never be necessary
   ;; spaces to make things look odd in different tab widths.
-  (setq	c-basic-offset tab-width
-	;; Make sure tabs are used instead of spaces (nil to force no tabs)
-	indent-tabs-mode t)
+;; (setq c-basic-offset tab-width
+;; 	;; Make sure tabs are used instead of spaces (nil to force no tabs)
+;; 	indent-tabs-mode t)
 
   ;; Don't try to line up arguments under other arguments (like C-mode).
   ;; This is because in a tab-environment, this will make things look
@@ -285,12 +285,13 @@
 (setq default-major-mode 'text-mode)
 
 ;; Autorevert package: Loads files that have been changed on disk.
-(if (locate-library "autorevert") 
-    (load-library "autorevert"))
-(autoload 'auto-revert-mode "autorevert" nil t)
-(autoload 'turn-on-auto-revert-mode "autorevert" nil nil)
-(autoload 'global-auto-revert-mode "autorevert" nil t)
-(global-auto-revert-mode 1)
+;; 2018-11-07 - No longer need to load, comes built in
+;; (if (locate-library "autorevert")
+;;     (load-library "autorevert"))
+;; (autoload 'auto-revert-mode "autorevert" nil t)
+;; (autoload 'turn-on-auto-revert-mode "autorevert" nil nil)
+;; (autoload 'global-auto-revert-mode "autorevert" nil t)
+;; (global-auto-revert-mode 1)
 
 ;; Fill properly using the following. 
 ;; Also see M-x apropos RET adaptive-fill RET
@@ -301,8 +302,7 @@
  '(c-support-package t)
  '(c-indent-comments-syntactically-p t)
  '(toolbar-mail-reader (quote not-configured))
-; '(compile-command "gmake -k ")
- '(compile-command "mm make ")
+ '(compile-command "bazel build ")
  '(query-user-mail-address nil))
 
 ; Turn on the mouse wheel
