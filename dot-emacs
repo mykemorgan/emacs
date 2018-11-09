@@ -285,13 +285,9 @@
 (setq default-major-mode 'text-mode)
 
 ;; Autorevert package: Loads files that have been changed on disk.
-;; 2018-11-07 - No longer need to load, comes built in
-;; (if (locate-library "autorevert")
-;;     (load-library "autorevert"))
-;; (autoload 'auto-revert-mode "autorevert" nil t)
-;; (autoload 'turn-on-auto-revert-mode "autorevert" nil nil)
-;; (autoload 'global-auto-revert-mode "autorevert" nil t)
-;; (global-auto-revert-mode 1)
+;; 2018-11-07 - No longer need to manually load: now built in.
+;; But still need to enable it.
+(global-auto-revert-mode 1)
 
 ;; Fill properly using the following. 
 ;; Also see M-x apropos RET adaptive-fill RET
