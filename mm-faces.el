@@ -19,11 +19,12 @@
   (set-face-foreground  'font-lock-builtin-face       "black")
   (when (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
-      (set-face-foreground  'minibuffer-prompt "black")
+    (set-face-foreground  'font-lock-preprocessor-face  "dark blue")
+    (set-face-foreground  'minibuffer-prompt "black")
     )
   (when (>= emacs-major-version 23)
-      (set-face-background  'show-paren-match "lightblue")
-      (set-face-foreground  'show-paren-match "black")
+    (set-face-background  'show-paren-match "lightblue")
+    (set-face-foreground  'show-paren-match "black")
     )
   (set-cursor-color "blue")
 
@@ -65,13 +66,14 @@
   (set-face-foreground  'font-lock-builtin-face       "white")
   (when (or (and (>= emacs-major-version 22) (>= emacs-minor-version 1))
           (>= emacs-major-version 23))
-      (set-face-foreground  'minibuffer-prompt "gray80")
+    (set-face-foreground  'font-lock-preprocessor-face  "#6666FF")
+    (set-face-foreground  'minibuffer-prompt "gray80")
     )
   (when (>= emacs-major-version 23)
     (set-face-background  'show-paren-match "lightblue")
     (set-face-foreground  'show-paren-match "black")
     )
-  (set-cursor-color "yellow")
+  (set-cursor-color "#8888FF")
 
   ;; Some dynamically displayed faces
   ;; the 'current' isearch item
@@ -105,7 +107,7 @@
         (>= emacs-major-version 23))
     (progn
       ;; Face to use for preprocessor commands.
-      (set-face-foreground  'font-lock-preprocessor-face  "dark blue")
+;;      (set-face-foreground  'font-lock-preprocessor-face  "dark blue")
       (custom-set-faces
        '(minibuffer-prompt ((t (:bold t))))
        '(mode-line-inactive ((t (:foreground "black" :background "gray60"))))
