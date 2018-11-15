@@ -36,6 +36,9 @@
   (set-face-background  'lazy-highlight               "#331155")
   (set-face-foreground  'lazy-highlight               "#cccccc")
 
+  ;; Color of the highlighted region
+  (set-face-background  'region                       "#AA88BB")
+
   ;; -------------------------------------------------------------------------
   ;; Override Faces needing changing on gnu/linux to "simple terminal colors":
   ;; Remember to do this last, haha.
@@ -47,7 +50,6 @@
     ;; (set-face-background  'isearch                      "magenta")
     ;; (set-face-foreground  'isearch                      "black")
     ;; (set-face-background  'lazy-highlight               "cyan")
-    (set-face-background  'region                       "cyan")
     (when (>= emacs-major-version 23)
       (set-face-background  'show-paren-match "magenta")
       (set-face-foreground  'show-paren-match "black")
@@ -83,6 +85,9 @@
   (set-face-background  'lazy-highlight               "#331155") ; darker violet
   (set-face-foreground  'lazy-highlight               "#cccccc")
 
+  ;; Color of the highlighted region
+  (set-face-background  'region                       "#664488")
+
   ;; -------------------------------------------------------------------------
   ;; Override Faces needing changing on gnu/linux to "simple terminal colors":
   ;; Or, use the '#RRGGBB notation for colors instead?
@@ -93,7 +98,6 @@
     ;; (set-face-foreground  'font-lock-string-face        "green")
     ;; (set-face-background  'isearch                      "yellow")
     ;; (set-face-background  'lazy-highlight               "white")
-    (set-face-background  'region                       "cyan")
     (when (>= emacs-major-version 23)
       (set-face-background  'show-paren-match "yellow")
       (set-face-foreground  'show-paren-match "black")
@@ -133,7 +137,6 @@
   (interactive)
   (set-foreground-color "black")
   (set-background-color "cornsilk")
-  (set-background-color "red")
   (mm-face-light-background)
   )
 
