@@ -123,7 +123,7 @@ given the current point.
     )
   )
 
-(defun mm-get-enclosed-string (&optional delim-begin &optional delim-end)
+(defun mm-get-enclosed-string (delim-begin &optional delim-end)
   "
 Get the string enclosed by the delimiters delim-begin and delim-end.
 Both delimiters are optional: see below for behvior if they are nil.
