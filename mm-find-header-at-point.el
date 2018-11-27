@@ -4,22 +4,24 @@
 ;                                                                                                       
 
 
-; Return the prefix of the given include file
-; XXX/mm Feature request: auto-find the C++ headers as well.
-; They seem to be in /usr/include/c++/<version>/
-;
-; This should be done by having a "config variable" which is setq'able
-; to contain a list of header directories to search. This way can be
-; user-customizable. Would allow others to use and point to their own
-; infra repos as well, for exmaple.
-;
-; And/Or, a list of string prefixes that signal which "system"
-; location to search, like I do manually with the "infra" and
-; "ifeature" below.
-;
-; Or, should I be doing all this by building an actual filename and
-; checking if it exists like the caller of this function?
-;
+;; Return the prefix of the given include file.
+;;
+;; XXX/mm Feature request: auto-find the standard library C++ headers
+;; as well. Actually, this location should be definable by the user,
+;; but maybe with a default if not defined? Also see below.
+;;
+;; This should be done by having a "config variable" which is
+;; setq'able to contain a list of header directories to search. This
+;; way can be user-customizable. Would allow others to use and point
+;; to their own infra repos as well, for exmaple.
+;;
+;; And/Or, a list of string prefixes that signal which "system"
+;; location to search, like is done manually with the "infra" and
+;; "infrastructure" below.
+;;
+;; Or, should I be doing all this by building an actual filename and
+;; checking if it exists like the caller of this function?
+;;
 (defun mm-get-include-file-prefix (file type)
   "
 Examine the FILE assuming its an #include directive file name and attempt
@@ -28,7 +30,7 @@ character:
 
 Common root directories will be determined by:
   type = '\"' - env(BUILDTOP)
-  type = '<'  - Infra top if FILE begins with 'infra' or 'ifeature'
+  type = '<'  - Infra top if FILE begins with 'infra' or 'infrastructure'
   type = '<'  - Otherwise the system include directory
 "
   (interactive "Mfile:\nctype:")
@@ -37,16 +39,18 @@ Common root directories will be determined by:
                        "buildtop")
                       ((= type ?<)
                        "system")))
+        (sysinclude "/usr/include")
+        (infradir "~/repos/infra")
         )
     (cond ((string= prefix "buildtop")
            (if (string-match "/" file)
                (getenv "BUILDTOP")
              "."))
           ((eq t (compare-strings "infra" nil nil file nil 5))
-           "~/repositories/infra/all")
-          ((eq t (compare-strings "ifeature" nil nil file nil 8))
-           "~/repositories/infra/all")
-          (t "/usr/include")
+           infradir)
+          ((eq t (compare-strings "infrastructure" nil nil file nil 8))
+           infradir)
+          (t sysinclude)
           )
     )
   )
@@ -54,14 +58,14 @@ Common root directories will be determined by:
 (defun mm-test-get-include-file-prefix ()
   (interactive)
   (let (
-        (b1 (mm-get-include-file-prefix "applogic/server/Merchant/foo.h" ?\"))
+        (b1 (mm-get-include-file-prefix "applogic/server/Foo/foo.h" ?\"))
         (b2 (mm-get-include-file-prefix "MyFoo.h" ?\"))
         (i1 (mm-get-include-file-prefix "infra/framework/foo.h" ?<))
-        (i2 (mm-get-include-file-prefix "ifeature/framework/asf/foo.h" ?<))
+        (i2 (mm-get-include-file-prefix "infrastructure/framework/Foo/foo.h" ?<))
         (s1 (mm-get-include-file-prefix "usr/local/foo.h" ?<))
         (s2 (mm-get-include-file-prefix "MyFoo.h" ?<))
         )
-    (message "Prefixes found:\nb1: [%s]\nb2: [%s]\ni1: [%s]\ni2: [%s]\ns1: [%s]\ns2: [%s]" b1 b2 i1 i2 s1 s2)
+    (message "Prefixes found:\nbuild1: [%s]\nbuild2: [%s]\ninfra1: [%s]\ninfra2: [%s]\nsystm1: [%s]\nsystm2: [%s]" b1 b2 i1 i2 s1 s2)
     )
   )
 
@@ -93,15 +97,15 @@ If file does not exist, do not try to create it.
     )
   )
 
-;----------------------------------------------------------------------
-; Test Data in which to park your point when calling this function
-; Success: "Sample string in quotes"
-; Success: <Sample string in less/greater than>
-; Fail: [Sample string in square brackets]
-; Fail: {Sample string in curly brackets}
-; (The fails are due to mm-find-enclosing-header-delimiter not yet looking
-;  for the brackets).
-;----------------------------------------------------------------------
+;;----------------------------------------------------------------------
+;; Test Data in which to park your point when calling this function
+;; Success: "Sample string in quotes"
+;; Success: <Sample string in less/greater than>
+;; Fail: [Sample string in square brackets]
+;; Fail: {Sample string in curly brackets}
+;; (The fails are due to mm-find-enclosing-header-delimiter not yet looking
+;;  for the brackets).
+;;----------------------------------------------------------------------
 (defun mm-test-find-enclosed-string ()
   "
 Test the get enclosing delimiter and get enclosed string
@@ -187,7 +191,7 @@ line as the point.
   (save-excursion
     ; XXX/mm add single-quotes? Seems to be used in oml files.
     (skip-chars-backward "^\"<\n")
-                                        ; Did we find a begin-char or newline / begin of file
+    ; Did we find a begin-char or newline / begin of file
     (if (and (> (point) 1)
              (or (= (char-before) ?\") (= (char-before) ?<)))
         (let (
@@ -195,7 +199,7 @@ line as the point.
               )
           ; XXX/mm Should only skip forward until the appropriate end-string character?
           (skip-chars-forward "^\">\n")
-                                        ; Did we find an end-char or newline / end of file.
+          ; Did we find an end-char or newline / end of file.
           (if (and (< (point) (1+ (buffer-size)))
                    (or (= (char-after) ?\") (= (char-after) ?>)))
               (let (
