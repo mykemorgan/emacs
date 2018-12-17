@@ -2,25 +2,25 @@
 ;;
 ;; 
 ;                                                                                                       
-
-
 ;; Return the prefix of the given include file.
 ;;
-;; XXX/mm Feature request: auto-find the standard library C++ headers
-;; as well. Actually, this location should be definable by the user,
-;; but maybe with a default if not defined? Also see below.
+;; XXX/mm Feature requests:
+;; - auto-find the standard library C++ headers?
+;; - Actually, this location should be definable by the user,
+;;   but maybe with a default if not defined? Also see below.
+;; - This should be done by having a "config variable" which is
+;;   setq'able to contain a list of header directories to search.
+;; - Have a list of string prefixes that signal which "system"
+;;   location(s) to search, like is done manually with the "infra" and
+;;   "infrastructure" below.
 ;;
-;; This should be done by having a "config variable" which is
-;; setq'able to contain a list of header directories to search. This
-;; way can be user-customizable. Would allow others to use and point
-;; to their own infra repos as well, for exmaple.
+;; All the above is so things can be user-customizable without
+;; changing this code depending on the project. Would allow others to
+;; use and point to their own infra repos as well, for exmaple.
 ;;
-;; And/Or, a list of string prefixes that signal which "system"
-;; location to search, like is done manually with the "infra" and
-;; "infrastructure" below.
-;;
-;; Or, should I be doing all this by building an actual filename and
-;; checking if it exists like the caller of this function?
+;; Maybe instead just search in "known directories" by building an
+;; full path filename and checking if it exists like the caller of
+;; this function?
 ;;
 (defun mm-get-include-file-prefix (file type)
   "
@@ -30,8 +30,13 @@ character:
 
 Common root directories will be determined by:
   type = '\"' - env(BUILDTOP)
-  type = '<'  - Infra top if FILE begins with 'infra' or 'infrastructure'
-  type = '<'  - Otherwise the system include directory
+  type = '<'  - Infra include directory env(INFRAINCLUDE) if FILE begins
+                with the string 'infra' or 'infrastructure'
+  type = '<'  - Otherwise the system include directory env(SYSINCLUDE)
+
+TODO?
+- Need to make all these 'system' and 'infra' locations configurable
+  beyond environment variables? Use emacs variables?
 "
   (interactive "Mfile:\nctype:")
   (let (
@@ -39,8 +44,8 @@ Common root directories will be determined by:
                        "buildtop")
                       ((= type ?<)
                        "system")))
-        (sysinclude "/usr/include")
-        (infradir "~/repos/infra")
+        (sysinclude (getenv "SYSINCLUDE"))
+        (infradir (getenv "INFRAINCLUDE"))
         )
     (cond ((string= prefix "buildtop")
            (if (string-match "/" file)
@@ -58,14 +63,60 @@ Common root directories will be determined by:
 (defun mm-test-get-include-file-prefix ()
   (interactive)
   (let (
-        (b1 (mm-get-include-file-prefix "applogic/server/Foo/foo.h" ?\"))
-        (b2 (mm-get-include-file-prefix "MyFoo.h" ?\"))
-        (i1 (mm-get-include-file-prefix "infra/framework/foo.h" ?<))
-        (i2 (mm-get-include-file-prefix "infrastructure/framework/Foo/foo.h" ?<))
-        (s1 (mm-get-include-file-prefix "usr/local/foo.h" ?<))
-        (s2 (mm-get-include-file-prefix "MyFoo.h" ?<))
+        ;; Save environment during test!
+        (buildtop (getenv "BUILDTOP"))
+        (sysinclude (getenv "SYSINCLUDE"))
+        (infrainclude (getenv "INFRAINCLUDE"))
         )
-    (message "Prefixes found:\nbuild1: [%s]\nbuild2: [%s]\ninfra1: [%s]\ninfra2: [%s]\nsystm1: [%s]\nsystm2: [%s]" b1 b2 i1 i2 s1 s2)
+    (setenv "BUILDTOP" "~/repo/foo/bar")
+    (setenv "SYSINCLUDE" "/foo/c++/include")
+    (setenv "INFRAINCLUDE" "~/repo/foo/infralocation")
+
+    (let (
+          (b1 (mm-get-include-file-prefix "apps/server/Foo/foo.h" ?\"))
+          (b2 (mm-get-include-file-prefix "MyFoo.h" ?\"))
+          (i1 (mm-get-include-file-prefix "infra/framework/foo.h" ?<))
+          (i2 (mm-get-include-file-prefix "infrastructure/framework/Foo/foo.h" ?<))
+          (s1 (mm-get-include-file-prefix "usr/local/foo.h" ?<))
+          (s2 (mm-get-include-file-prefix "MyFoo.h" ?<))
+          )
+      (message "Prefixes found:")
+      (message "  build1: [%s]" b1)
+      (message "  build2: [%s]" b2)
+      (message "  infra1: [%s]" i1)
+      (message "  infra2: [%s]" i2)
+      (message "  systm1: [%s]" s1)
+      (message "  systm2: [%s]" s2)
+      (message "Results:")
+      (if (string= b1 (getenv "BUILDTOP"))
+          (message "  SUCCESS b1")
+        (message "  FAIL b1")
+        )
+      (if (string= b2 ".")
+          (message "  SUCCESS b2")
+        (message "  FAIL b2")
+        )
+      (if (string= i1 (getenv "INFRAINCLUDE"))
+          (message "  SUCCESS i1")
+        (message "  FAIL i1")
+        )
+      (if (string= i2 (getenv "INFRAINCLUDE"))
+          (message "  SUCCESS i2")
+        (message "  FAIL i2")
+        )
+      (if (string= s1 (getenv "SYSINCLUDE"))
+          (message "  SUCCESS s1")
+        (message "  FAIL s1")
+        )
+      (if (string= s2 (getenv "SYSINCLUDE"))
+          (message "  SUCCESS s2")
+        (message "  FAIL s2")
+        )
+      )
+    ;; Restore environment
+    (setenv "BUILDTOP" buildtop)
+    (setenv "SYSINCLUDE" sysinclude)
+    (setenv "INFRAINCLUDE" infrainclude)
     )
   )
 
@@ -115,10 +166,10 @@ given the current point.
   (interactive)
   (let ((delim (mm-find-enclosing-header-delimiter)))
     (if delim
-        (message "Found Delim [%c]\nFound string [%s]"
+        (message "SUCCESS: Delim [%c] String [%s]"
                  delim
                  (mm-get-enclosed-string delim))
-      (message "Didn't find a begin or possibly an end")
+      (message "FAIL: Didn't find a begin or possibly an end")
         )
     )
   )
