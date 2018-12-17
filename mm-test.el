@@ -3,13 +3,14 @@
 ;; Oops, See also: mm-examples.el
 ;
 
-(defun test-find-header-at-point ()
+(defun test-sample ()
   "Test new function."
   (interactive)
   (save-excursion
-    (setq filename-begin (point))
-    (setq filename-end (+ 2 (point)))
-    (setq filename (buffer-substring-no-properties filename-begin filename-end))
+    (setq name-begin (point))
+    (setq name-end (+ 4 (point)))
+    (setq name (buffer-substring-no-properties name-begin name-end))
+    (message "Found name: '%s'" name)
     )
   )
   
