@@ -87,18 +87,23 @@
 (global-set-key "\M-p"	    'scroll-line-down)
 
 ;; Global key bindings from random times in the past.
-;; Should wrap these in some sort of 'if not OSX' since these
-;; Interfere with OSX Mission Control/Spaces, and might not work with the new touchbar either?
+;; Wrapped in system check since some of these interfere with
+;; OSX Mission Control/Spaces, and possibly not with touchbar either?
 ;
-;; (global-set-key [f8]  'start-kbd-macro)
-;; (global-set-key [f9]  'end-kbd-macro)
-;; (global-set-key [f10] 'call-last-kbd-macro)
-;; (global-set-key [f11] 'compile)
-;
-;; (global-set-key [f9]  'other-window)
-;; (global-set-key [f10] 'other-frame)
-;; (global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
-;; (global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
+(when (eq system-type 'gnu/linux)
+  (global-set-key [f5]  'start-kbd-macro)
+  (global-set-key [f6]  'end-kbd-macro)
+  (global-set-key [f7]  'call-last-kbd-macro)
+
+  (global-set-key [f8]  'other-frame)
+  (global-set-key [f9]  'other-window)
+
+  ;; Possible other stuff:
+  ;; [f10] scooped up by emacs or linux's "show File Menu" functionality.
+  ;; (global-set-key [f11] 'compile)
+  ;; (global-set-key [f11] (lambda () (interactive) (tags-apropos (current-word))))
+  ;; (global-set-key [f12] (lambda (tag) (interactive "sApropos tag: ") (tags-apropos tag)))
+  )
 
 ;; Set up file type recognition
 (setq auto-mode-alist (mapcar 'purecopy
@@ -125,6 +130,7 @@
                                 ("\\.html$" . html-mode)
                                 ("\\.tex$" . TeX-mode)
                                 ("\\.txi$" . Texinfo-mode)
+                                ("\\.txt$" . text-mode)
                                 ("\\.el$" . emacs-lisp-mode)
                                 ("\\.py$" . python-mode)
                                 ("\\.pig$" . sql-mode)
