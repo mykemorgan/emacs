@@ -140,6 +140,29 @@
   (mm-face-light-background)
   )
 
+; Set font sizes. Surely there's a better way? Like with, you know, an argument?
+(defun mm-set-font-small ()
+  "Set to the small font size."
+  (interactive)
+  (custom-set-faces
+   '(default ((t (:family "Hack" :height 120))))
+   )
+  )
+(defun mm-set-font-normal ()
+  "Set to the normal font size."
+  (interactive)
+  (custom-set-faces
+   '(default ((t (:family "Hack" :height 140))))
+   )
+  )
+(defun mm-set-font-large ()
+  "Set to the large font size. Possibly visible when sharing screens."
+  (interactive)
+  (custom-set-faces
+   '(default ((t (:family "Hack" :height 200))))
+   )
+  )
+
 ; This seems to be the only way to set default "bold" properties?
 (custom-set-faces
  '(default ((t (:family "Hack" :height 120))))
